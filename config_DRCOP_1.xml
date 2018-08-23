@@ -1,0 +1,166 @@
+<main>
+<crap></crap>
+<smoothfir>
+  <globals>
+    <sampling_rate>44100</sampling_rate>
+    <overflow_warnings>true</overflow_warnings>
+    <filter_length>
+      <block_length>512</block_length>
+      <n_blocks>64</n_blocks>
+    </filter_length>
+    <!--debug>true</debug-->
+    <!--powersave>-60</powersave-->
+    <!--show_progress>true</show_progress-->
+    <logic>
+      <name>race</name>
+      <params>
+	<direct_coeff>race direct</direct_coeff>
+	<cross_coeff>race cross</cross_coeff>
+	<attenuation>5.0</attenuation>
+	<delay>6</delay>
+	<low_cut_freq>200</low_cut_freq>
+	<low_cut_slope>12</low_cut_slope>
+	<high_cut_freq>14000</high_cut_freq>
+	<high_cut_slope>12</high_cut_slope>
+      </params>
+    </logic>
+  </globals>
+  <coeff>
+    <name>race direct</name>
+    <filename>dirac pulse</filename>
+    <blocks>64</blocks>
+  </coeff>
+  <coeff>
+    <name>race cross</name>
+    <filename>dirac pulse</filename>
+    <blocks>64</blocks>
+  </coeff>
+  <coeff>
+    <name>DRC00_left</name>
+    <filename>/home/drcop/Measurements/genelec/left_rps.wav</filename>
+    <format>sndfile</format>
+    <shared_mem>true</shared_mem>
+    <blocks>64</blocks>
+  </coeff>
+  <coeff>
+    <name>DRC00_right</name>
+    <filename>/home/drcop/Measurements/genelec/right_rps.wav</filename>
+    <format>sndfile</format>
+    <shared_mem>true</shared_mem>
+    <blocks>64</blocks>
+  </coeff>
+  <input> 
+    <params>
+      <priority>65</priority>
+      <port>
+	<index>0</index>
+	<destname>firewire_pcm:000a9200d7010775_LineIn 3+4 left_in</destname>
+      </port>
+      <port>
+	<index>1</index>
+	<destname>firewire_pcm:000a9200d7010775_LineIn 3+4 right_in</destname>
+      </port>
+    </params>
+    <channel>
+      <name>left</name>
+      <mapping>0</mapping>
+      <delay>0</delay>
+    </channel>
+    <channel>
+      <name>right</name>
+      <mapping>1</mapping>
+      <delay>0</delay>
+    </channel>
+  </input>
+  <output> 
+    <params>
+      <port>
+	<index>0</index>
+	<destname>firewire_pcm:000a9200d7010775_LineOut 3+4 left_out</destname>
+      </port>
+      <port>
+	<index>1</index>
+	<destname>firewire_pcm:000a9200d7010775_LineOut 3+4 right_out</destname>
+      </port>
+    </params>
+    <channel>
+      <name>left</name>
+      <mapping>0</mapping>
+      <!--delay>0</delay-->
+    </channel>
+    <channel>
+      <name>right</name>
+      <mapping>1</mapping>
+      <!--delay>0</delay-->
+    </channel>
+  </output>
+  <filter>
+    <name>race left direct</name>
+    <coeff_name>race direct</coeff_name>
+    <from_inputs>
+      <name>left</name>
+      <attenuation>0.0</attenuation>
+    </from_inputs>
+    <to_filters>
+      <name>DRC_left</name>
+    </to_filters>
+  </filter>
+  <filter>
+    <name>race left cross</name>
+    <coeff_name>race cross</coeff_name>
+    <from_inputs>
+      <name>left</name>
+      <attenuation>0.0</attenuation>
+    </from_inputs>
+    <to_filters>
+      <name>DRC_right</name>
+    </to_filters>
+  </filter>
+  <filter>
+    <name>race right direct</name>
+    <coeff_name>race direct</coeff_name>
+    <from_inputs>
+      <name>right</name>
+      <attenuation>0.0</attenuation>
+    </from_inputs>
+    <to_filters>
+      <name>DRC_right</name>
+    </to_filters>
+  </filter>
+  <filter>
+    <name>race right cross</name>
+    <coeff_name>race cross</coeff_name>
+    <from_inputs>
+      <name>right</name>
+      <attenuation>0.0</attenuation>
+    </from_inputs>
+    <to_filters>
+      <name>DRC_left</name>
+    </to_filters>
+  </filter>
+  <filter>
+    <name>DRC_left</name>
+    <coeff_name>DRC00_left</coeff_name>
+    <from_filters>
+      <name>race left direct</name>
+      <name>race right cross</name>
+    </from_filters>
+    <to_outputs>
+      <name>left</name>
+      <attenuation>0.0</attenuation>
+    </to_outputs>
+  </filter>
+  <filter>
+    <name>DRC_right</name>
+    <coeff_name>DRC00_right</coeff_name>
+    <from_filters>
+      <name>race right direct</name>
+      <name>race left cross</name>
+    </from_filters>
+    <to_outputs>
+      <name>right</name>
+      <attenuation>0.0</attenuation>
+    </to_outputs>
+  </filter>
+</smoothfir>
+</main>
