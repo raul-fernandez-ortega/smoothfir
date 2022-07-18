@@ -32,7 +32,7 @@ void Delay::copy_to_delaybuf(void *dbuf,
   int n, i;
   
   if (sample_spacing == 1) {
-    MEMCPY(dbuf, buf, n_samples * sample_size);
+    memcpy(dbuf, buf, n_samples * sample_size);
     return;
   }
   
@@ -82,7 +82,7 @@ void Delay::copy_from_delaybuf(void *buf,
   int n, i;
   
   if (sample_spacing == 1) {
-    MEMCPY(buf, dbuf, n_samples * sample_size);
+    memcpy(buf, dbuf, n_samples * sample_size);
     return;
   }
   
@@ -188,7 +188,7 @@ void Delay::update_delay_buffer(delaybuffer_t *db,
     copy_from_delaybuf(buf, db->rbuf, sample_size, sample_spacing, db->n_rest);
     
     /* 3. copy from end of last full-sized delay buffer to rest buffer */
-    MEMCPY(db->rbuf, lastbuf + (db->fragsize - db->n_rest) * sample_size, db->n_rest * sample_size);
+    memcpy(db->rbuf, lastbuf + (db->fragsize - db->n_rest) * sample_size, db->n_rest * sample_size);
   }
 
   /* 4. copy from start of last full-sized buffer to end of buffer */
@@ -225,8 +225,8 @@ void Delay::change_delay(delaybuffer_t *db,
     db->n_rest = newdelay;
     size = newdelay * sample_size;
     if (db->curdelay > db->fragsize || db->curdelay < newdelay) {
-      MEMSET(db->shortbuf[0], 0, size);
-      MEMSET(db->shortbuf[1], 0, size);
+      memset(db->shortbuf[0], 0, size);
+      memset(db->shortbuf[1], 0, size);
     }
     db->n_fbufs = 0;
     db->curbuf = 0;
@@ -238,10 +238,10 @@ void Delay::change_delay(delaybuffer_t *db,
   size = db->fragsize * sample_size;
   if (db->curdelay < newdelay) {
     for (i = 0; i < db->n_fbufs; i++) {
-      MEMSET(db->fbufs[i], 0, size);
+      memset(db->fbufs[i], 0, size);
     }
     if (db->n_rest != 0) {
-      MEMSET(db->rbuf, 0, db->n_rest * sample_size);
+      memset(db->rbuf, 0, db->n_rest * sample_size);
     }
   }
   db->curbuf = 0;
@@ -280,7 +280,7 @@ delaybuffer_t * Delay::delay_allocate_buffer(int fragment_size,
   /* if maxdelay is negative, no delay changing will be allowed, thus
      memory need only to be allocated for the current delay */
   db = new delaybuffer_t [sizeof(delaybuffer_t)];
-  MEMSET(db, 0, sizeof(delaybuffer_t));
+  memset(db, 0, sizeof(delaybuffer_t));
   db->fragsize = fragment_size;
   
   delay = (maxdelay <= 0) ? initdelay : maxdelay;
@@ -298,8 +298,8 @@ delaybuffer_t * Delay::delay_allocate_buffer(int fragment_size,
     size = delay * sample_size;
     db->shortbuf[0] = emallocaligned(size);
     db->shortbuf[1] = emallocaligned(size);
-    MEMSET(db->shortbuf[0], 0, size);
-    MEMSET(db->shortbuf[1], 0, size);
+    memset(db->shortbuf[0], 0, size);
+    memset(db->shortbuf[1], 0, size);
     return db;
   }
   if (maxdelay > 0) {
@@ -308,8 +308,8 @@ delaybuffer_t * Delay::delay_allocate_buffer(int fragment_size,
     size = fragment_size * sample_size;
     db->shortbuf[0] = emallocaligned(size);
     db->shortbuf[1] = emallocaligned(size);
-    MEMSET(db->shortbuf[0], 0, size);
-    MEMSET(db->shortbuf[1], 0, size);
+    memset(db->shortbuf[0], 0, size);
+    memset(db->shortbuf[1], 0, size);
   }
   
   db->n_rest = initdelay % fragment_size;
@@ -322,15 +322,15 @@ delaybuffer_t * Delay::delay_allocate_buffer(int fragment_size,
   size = fragment_size * sample_size;
   for (n = 0; n < db->n_fbufs_cap; n++) {
     db->fbufs[n] = emallocaligned(size);
-    MEMSET(db->fbufs[n], 0, size);
+    memset(db->fbufs[n], 0, size);
   }
   if (maxdelay > 0) {
     db->rbuf = emallocaligned(size);
-    MEMSET(db->rbuf, 0, size);
+    memset(db->rbuf, 0, size);
   } else if (db->n_rest != 0) {
     size = db->n_rest * sample_size;
     db->rbuf = emallocaligned(size);
-    MEMSET(db->rbuf, 0, size);
+    memset(db->rbuf, 0, size);
   }
   return db;
 }

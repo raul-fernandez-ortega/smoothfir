@@ -55,11 +55,11 @@ void *create_fft_plan(int realsize, int length, bool inplace, bool invert)
   void *plan, *buf[2];
   
   buf[0] = emallocaligned(length * realsize);
-  MEMSET(buf[0], 0, length * realsize);
+  memset(buf[0], 0, length * realsize);
   buf[1] = buf[0];
   if (!inplace) {
     buf[1] = emallocaligned(length * realsize);
-    MEMSET(buf[1], 0, length * realsize);
+    memset(buf[1], 0, length * realsize);
   }
   if (realsize == 4) {
     plan = (float*)fftwf_plan_r2r_1d(length, (float*)buf[0], (float*)buf[1], invert ? FFTW_HC2R : FFTW_R2HC, FFTW_MEASURE||FFTW_PATIENT);
@@ -327,7 +327,7 @@ void Convolver::convolver_convolve_eval(void *input_cbuf,
     fftw_execute_r2r((const fftw_plan)ifftplans[fft_order], (double *)input_cbuf, &((double *)buffer_cbuf)[n_fft2]);
     fftw_execute_r2r((const fftw_plan)fftplans[fft_order], (double *)buffer_cbuf, (double *)output_cbuf);
   }
-  MEMCPY(buffer_cbuf, &((uint8_t *)buffer_cbuf)[n_fft2 * realsize], n_fft2 * realsize);
+  memcpy(buffer_cbuf, &((uint8_t *)buffer_cbuf)[n_fft2 * realsize], n_fft2 * realsize);
 }
  
 int Convolver::convolver_cbufsize(void)
@@ -346,7 +346,7 @@ void * Convolver::convolver_coeffs2cbuf(void *coeffs,
   
   len = (n_coeffs > n_fft2) ? n_fft2 : n_coeffs;
   rcoeffs = emallocaligned(n_fft * realsize);
-  MEMSET(rcoeffs, 0, n_fft * realsize);
+  memset(rcoeffs, 0, n_fft * realsize);
   
   if (realsize == 4) {
     for (n = 0; n < len; n++) {
@@ -387,8 +387,8 @@ void Convolver::convolver_runtime_coeffs2cbuf(void *src,  /* nfft / 2 */
   if (tmp == NULL) {
     tmp = emallocaligned(n_fft * realsize);
   }
-  MEMSET(dest, 0, n_fft2 * realsize);
-  MEMCPY(&((uint8_t *)dest)[n_fft2 * realsize], src, n_fft2 * realsize);
+  memset(dest, 0, n_fft2 * realsize);
+  memcpy(&((uint8_t *)dest)[n_fft2 * realsize], src, n_fft2 * realsize);
   if (realsize == 4) {
     fftwf_execute_r2r((const fftwf_plan)fftplans[fft_order], (float *)dest, (float *)tmp);
   } else {
@@ -501,15 +501,15 @@ td_conv_t* Convolver::convolver_td_new(void *coeffs, int n_coeffs)
     return NULL;
   }
   tdc = (_td_conv_t_*)emalloc(sizeof(td_conv_t));
-  MEMSET(tdc, 0, sizeof(td_conv_t));
+  memset(tdc, 0, sizeof(td_conv_t));
   tdc->fftplan = convolver_fftplan(log2_get(blocklen) + 1, false, true);
   tdc->ifftplan = convolver_fftplan(log2_get(blocklen) + 1, true, true);
   tdc->coeffs = emallocaligned(2 * blocklen * realsize);
   tdc->blocklen = blocklen;
   
-  MEMSET(tdc->coeffs, 0, blocklen * realsize);
-  MEMSET(&((uint8_t *)tdc->coeffs)[(blocklen + n_coeffs) * realsize], 0, (blocklen - n_coeffs) * realsize);
-  MEMCPY(&((uint8_t *)tdc->coeffs)[blocklen * realsize], coeffs, n_coeffs * realsize);
+  memset(tdc->coeffs, 0, blocklen * realsize);
+  memset(&((uint8_t *)tdc->coeffs)[(blocklen + n_coeffs) * realsize], 0, (blocklen - n_coeffs) * realsize);
+  memcpy(&((uint8_t *)tdc->coeffs)[blocklen * realsize], coeffs, n_coeffs * realsize);
   if (realsize == 4) {
     fftwf_execute_r2r((fftwf_plan_s*)tdc->fftplan, (float*)tdc->coeffs, (float*)tdc->coeffs);
     scalef = 1.0 / (float)(blocklen << 1);
@@ -602,7 +602,7 @@ bool Convolver::convolver_init(int length, int _realsize)
     fclose(stream);
     }*/
   
-  MEMSET(fftplan_generated, 0, sizeof(fftplan_generated));
+  memset(fftplan_generated, 0, sizeof(fftplan_generated));
   fprintf(stderr, "Creating 4 FFTW plans of size %d...\n", 1 << fft_order);
   convolver_fftplan(fft_order, false, false);
   convolver_fftplan(fft_order, false, true);

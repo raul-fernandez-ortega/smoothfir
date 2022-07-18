@@ -150,7 +150,7 @@ void LADSPA_PLUGIN::ConnectControlPort(string port_name, LADSPA_Data port_value)
       }
       for(n = 0; n < nPluginControls; n ++) {
 	if(PluginControls[n].index == PortIndex) {
-	  MEMCPY(PluginControls[n].control_value, &port_value, sizeof(LADSPA_Data));
+	  memcpy(PluginControls[n].control_value, &port_value, sizeof(LADSPA_Data));
 	  PluginDescriptor->connect_port(PluginHandle, PortIndex, PluginControls[n].control_value);
 	  break;
 	}
@@ -425,17 +425,17 @@ void LADSPA_PLUGIN::output_timed(void *buffer, int channel)
   unsigned long n;
 
   pthread_mutex_lock(&mutex);
-  MEMSET(BufferIN, 0, sizeof(LADSPA_Data) * 2 * sfconf->filter_length);
+  memset(BufferIN, 0, sizeof(LADSPA_Data) * 2 * sfconf->filter_length);
   for(n = 0; n < OutputChannel.size(); n++) {
     if(sfconf->channels[SF_OUT][channel].name.compare(OutputChannel[n]) == 0) {
       if (processedOutputs == 0) {
 	if (nPluginInputs > 0)
-	  MEMCPY(BufferIN, (LADSPA_Data*)buffer, sfconf->filter_length*sizeof(LADSPA_Data));
+	  memcpy(BufferIN, (LADSPA_Data*)buffer, sfconf->filter_length*sizeof(LADSPA_Data));
 	PluginDescriptor->run(PluginHandle, sfconf->filter_length);
 	processedOutputs = ( processedOutputs == 6 ? 0 : processedOutputs++);
       }
       if (nPluginOutputs > 0) {
-	MEMCPY((LADSPA_Data*)buffer, BufferOUT[n], sfconf->filter_length*sizeof(LADSPA_Data));
+	memcpy((LADSPA_Data*)buffer, BufferOUT[n], sfconf->filter_length*sizeof(LADSPA_Data));
       }
     }
   }
@@ -449,16 +449,16 @@ void LADSPA_PLUGIN::input_timed(void *buffer, int channel)
     return;
 
   pthread_mutex_lock(&mutex);
-  MEMSET(BufferIN, 0, sizeof(LADSPA_Data) * 2 * sfconf->filter_length);
+  memset(BufferIN, 0, sizeof(LADSPA_Data) * 2 * sfconf->filter_length);
   if(sfconf->channels[SF_IN][channel].name.compare(InputChannel) == 0) {
     if (nPluginInputs > 0) {
-      MEMCPY(&BufferIN[0], &((LADSPA_Data*)buffer)[sfconf->filter_length], sfconf->filter_length*sizeof(LADSPA_Data));
-      MEMCPY(&BufferIN[sfconf->filter_length], &((LADSPA_Data*)buffer)[0], sfconf->filter_length*sizeof(LADSPA_Data));
+      memcpy(&BufferIN[0], &((LADSPA_Data*)buffer)[sfconf->filter_length], sfconf->filter_length*sizeof(LADSPA_Data));
+      memcpy(&BufferIN[sfconf->filter_length], &((LADSPA_Data*)buffer)[0], sfconf->filter_length*sizeof(LADSPA_Data));
     }
     PluginDescriptor->run(PluginHandle, 2 * sfconf->filter_length);
     if (nPluginOutputs > 0) {
-      MEMCPY(&((LADSPA_Data*)buffer)[sfconf->filter_length], &BufferOUT[0][0], sfconf->filter_length*sizeof(LADSPA_Data));
-      MEMCPY(&((LADSPA_Data*)buffer)[0], &BufferOUT[0][sfconf->filter_length], sfconf->filter_length*sizeof(LADSPA_Data));
+      memcpy(&((LADSPA_Data*)buffer)[sfconf->filter_length], &BufferOUT[0][0], sfconf->filter_length*sizeof(LADSPA_Data));
+      memcpy(&((LADSPA_Data*)buffer)[0], &BufferOUT[0][sfconf->filter_length], sfconf->filter_length*sizeof(LADSPA_Data));
     }
   }
   pthread_mutex_unlock(&mutex);
@@ -473,7 +473,7 @@ SFLOGIC_LADSPA::SFLOGIC_LADSPA(struct sfconf *_sfconf,
   debug = false;
   fork_mode = SF_FORK_DONT_FORK;
   
-  MEMSET(msg, 0, MAX_MSG_LEN);
+  memset(msg, 0, MAX_MSG_LEN);
 };
 
 int SFLOGIC_LADSPA::preinit(xmlNodePtr sfparams, int _debug)

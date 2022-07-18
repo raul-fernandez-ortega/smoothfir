@@ -24,9 +24,9 @@ void SFLOGIC_CLI::clear_changes(void)
       newstate.fctrl[n].fscale[i] = icomm->fctrl[n].fscale[i];
     }
   }
-  MEMSET(newstate.toggle_mute, 0, sizeof(newstate.toggle_mute));
-  MEMSET(newstate.fchanged, 0, sizeof(newstate.fchanged));
-  MEMSET(newstate.delay, -1, sizeof(newstate.delay));
+  memset(newstate.toggle_mute, 0, sizeof(newstate.toggle_mute));
+  memset(newstate.fchanged, 0, sizeof(newstate.fchanged));
+  memset(newstate.delay, -1, sizeof(newstate.delay));
   for (n = 0; n < SF_MAXCHANNELS; n++) {
     newstate.subdelay[IN][n] = SF_UNDEFINED_SUBDELAY;
     newstate.subdelay[OUT][n] = SF_UNDEFINED_SUBDELAY;
@@ -563,7 +563,7 @@ bool SFLOGIC_CLI::parse_command(FILE *stream,
   } else if (strcmp(cmd, "quit") == 0) {
     return false;
   } else if (strstr(cmd, "sleep") == cmd) {
-    MEMSET(&sleep_task, 0, sizeof(struct sleep_task));
+    memset(&sleep_task, 0, sizeof(struct sleep_task));
     if ((p = strchr(cmd + 5, 'b')) != NULL) {
       n = strtol(p + 1, &p, 10);
       if (p != NULL && n >= 0) {
@@ -592,7 +592,7 @@ bool SFLOGIC_CLI::parse_command(FILE *stream,
 	  }
 	}
             } else {
-	MEMCPY(_sleep_task, &sleep_task, sizeof(struct sleep_task));
+	memcpy(_sleep_task, &sleep_task, sizeof(struct sleep_task));
       }
     }
   } else if (strstr(cmd, "abort") == cmd) {
@@ -657,7 +657,7 @@ bool SFLOGIC_CLI::parse(FILE *stream,
     int len;
 
     if (sleep_task != NULL) {
-        MEMSET(sleep_task, 0, sizeof(struct sleep_task));
+        memset(sleep_task, 0, sizeof(struct sleep_task));
     }
     do_quit = false;
     len = strlen(cmd);
@@ -665,7 +665,7 @@ bool SFLOGIC_CLI::parse(FILE *stream,
         return true;
     }
     buf = (char*)alloca(len + 1);
-    MEMCPY(buf, cmd, len + 1);
+    memcpy(buf, cmd, len + 1);
     if (buf[len - 1] == '\n') {
         buf[len - 1] = '\0';
     }
@@ -914,7 +914,7 @@ SFLOGIC_CLI::SFLOGIC_CLI(struct sfconf *_sfconf,
   print_prompt = true;
   print_commands = true;
   debug = false;
-  MEMSET(&newstate, 0, sizeof(newstate));
+  memset(&newstate, 0, sizeof(newstate));
   error[0] = '\0';
   port = -1;
   port2 = -1;
@@ -1004,7 +1004,7 @@ int SFLOGIC_CLI::init(int event_fd, sem_t *synch_sem)
 	sfaccess->exit(SF_EXIT_OTHER);
 	return 0;
       }
-      MEMSET(&newtio, 0, sizeof(newtio));
+      memset(&newtio, 0, sizeof(newtio));
       newtio.c_cflag = CS8 | CLOCAL | CREAD;
       cfsetispeed(&newtio, speed);
       cfsetospeed(&newtio, speed);
@@ -1056,7 +1056,7 @@ int SFLOGIC_CLI::init(int event_fd, sem_t *synch_sem)
       
     } else if (port != -1) {
       /* TCP interface */
-      MEMSET(&s_in, 0, sizeof(s_in));
+      memset(&s_in, 0, sizeof(s_in));
       s_in.sin_family = AF_INET;
       s_in.sin_addr.s_addr = INADDR_ANY;
       s_in.sin_port = htons(port);
@@ -1085,7 +1085,7 @@ int SFLOGIC_CLI::init(int event_fd, sem_t *synch_sem)
     } else if (lport != NULL) {
       /* local socket interface */
       remove(lport);
-      MEMSET(&s_un, 0, sizeof(s_un));
+      memset(&s_un, 0, sizeof(s_un));
       s_un.sun_family = AF_UNIX;
       strncpy(s_un.sun_path, lport, sizeof(s_un.sun_path));
       s_un.sun_path[sizeof(s_un.sun_path) - 1] = '\0';

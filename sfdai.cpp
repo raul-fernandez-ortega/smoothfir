@@ -113,7 +113,7 @@ void Dai::do_mute(struct subdev *sd,
     p = &buf->u8[offset];
     i = sfconf->filter_length * sd->channels.sf.bytes;
     for (n = 0; n < n_mute; n++) {
-      MEMSET(p + ch[n] * i, 0, wsize);
+      memset(p + ch[n] * i, 0, wsize);
     }
     return;
   }
@@ -353,8 +353,8 @@ void Dai::Dai_init(void)
    
   n_fd_devs[SF_IN] = 0;
   n_fd_devs[SF_OUT] = 0;
-  MEMSET(dev_fds, 0, sizeof(dev_fds));
-  MEMSET(&clocked_wfds, 0, sizeof(clocked_wfds));
+  memset(dev_fds, 0, sizeof(dev_fds));
+  memset(&clocked_wfds, 0, sizeof(clocked_wfds));
   n_clocked_devs = 0;
   dev_fdn[SF_IN] = 0;
   dev_fdn[SF_OUT] = 0;
@@ -363,8 +363,8 @@ void Dai::Dai_init(void)
   cb_min_block_size[SF_IN] = 0;
   cb_min_block_size[SF_OUT] = 0;
   input_poll_mode = false;
-  MEMSET(fd2dev, 0, sizeof(fd2dev));
-  MEMSET(ch2dev, 0, sizeof(ch2dev));
+  memset(fd2dev, 0, sizeof(fd2dev));
+  memset(ch2dev, 0, sizeof(ch2dev));
   dai_buffer_format[0] = NULL;
   dai_buffer_format[1] = NULL;
   
@@ -433,7 +433,7 @@ void Dai::Dai_init(void)
     return;
   }
   //buffer = new uint8_t [2 * dai_buffer_format[IN]->n_bytes + 2 * dai_buffer_format[OUT]->n_bytes];
-  MEMSET(buffer, 0, 2 * dai_buffer_format[IN]->n_bytes + 2 * dai_buffer_format[OUT]->n_bytes);
+  memset(buffer, 0, 2 * dai_buffer_format[IN]->n_bytes + 2 * dai_buffer_format[OUT]->n_bytes);
   FOR_IN_AND_OUT {
     iobuffers[IO][0] = buffer;
     buffer += dai_buffer_format[IO]->n_bytes;
@@ -545,13 +545,13 @@ void Dai::process_callback_input(struct subdev *sd,
   }
   count = frame_count * sd->channels.used_channels * sd->channels.sf.bytes;
   if (sd->isinterleaved) {
-    MEMCPY(buf + sd->buf_offset + sd->buf_size - sd->buf_left, cbbufs[0], count);
+    memcpy(buf + sd->buf_offset + sd->buf_size - sd->buf_left, cbbufs[0], count);
   } else {
     sf = &dai_buffer_format[IN]->bf[sd->channels.channel_name[0]];
     cnt = count / sd->channels.used_channels;
     copybuf = buf + sd->buf_offset + (sd->buf_size - sd->buf_left) / sd->channels.used_channels;
     for (n = 0; n < sd->channels.used_channels; n++) {
-      MEMCPY(copybuf, cbbufs[n], cnt);
+      memcpy(copybuf, cbbufs[n], cnt);
       copybuf += sfconf->filter_length * sf->sf.sbytes;
     }
   }
@@ -577,11 +577,11 @@ void Dai::process_callback_output(struct subdev *sd,
   
   if (iodelay_fill) {
     if (sd->isinterleaved) {
-      MEMSET(cbbufs[0], 0, count);
+      memset(cbbufs[0], 0, count);
     } else {
       cnt = count / sd->channels.used_channels;
       for (n = 0; n < sd->channels.used_channels; n++) {
-	MEMSET(cbbufs[n], 0, cnt);
+	memset(cbbufs[n], 0, cnt);
       }
     }
     return;
@@ -589,13 +589,13 @@ void Dai::process_callback_output(struct subdev *sd,
   
   do_mute(sd, OUT, count, (void *)(buf + sd->buf_offset), sd->buf_size - sd->buf_left);
   if (sd->isinterleaved) {
-    MEMCPY(cbbufs[0], buf + sd->buf_offset + sd->buf_size - sd->buf_left, count);
+    memcpy(cbbufs[0], buf + sd->buf_offset + sd->buf_size - sd->buf_left, count);
   } else {
     sf = &dai_buffer_format[OUT]->bf[sd->channels.channel_name[0]];
     cnt = count / sd->channels.used_channels;
     copybuf = buf + sd->buf_offset + (sd->buf_size - sd->buf_left) / sd->channels.used_channels;
     for (n = 0; n < sd->channels.used_channels; n++) {
-      MEMCPY(cbbufs[n], copybuf, cnt);
+      memcpy(cbbufs[n], copybuf, cnt);
       wbuf = (float *)copybuf;
       copybuf += sfconf->filter_length * sf->sf.sbytes;
     }

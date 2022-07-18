@@ -20,9 +20,9 @@ ioJack::ioJack(struct sfconf *_sfconf,
   debug = !!sfconf->debug;
   has_started = false;
 
-  MEMSET(hasio, 0, sizeof(hasio));
-  MEMSET(handles, 0, sizeof(handles));
-  MEMSET(n_handles, 0, sizeof(n_handles));
+  memset(hasio, 0, sizeof(hasio));
+  memset(handles, 0, sizeof(handles));
+  memset(n_handles, 0, sizeof(n_handles));
 
   io_idx[SF_IN] = 0;
   io_idx[SF_OUT] = 0;
@@ -148,7 +148,7 @@ void ioJack::preinit(int io, struct iodev *iodev)
   } 
   
   callback_sched_param = &sfconf->subdevs[io].sched_param;
-  MEMSET(callback_sched_param, 0, sizeof(*callback_sched_param));
+  memset(callback_sched_param, 0, sizeof(*callback_sched_param));
   sfconf->subdevs[io].sched_param.sched_priority = expected_priority;
   sfconf->subdevs[io].sched_policy = SCHED_FIFO;
     
@@ -285,7 +285,7 @@ int ioJack::sf_process_callback(jack_nframes_t n_frames)
       jackState = handles[OUT][n];
       for (i = 0; i < jackState->n_channels; i++) {
 	buffer = jack_port_get_buffer(jackState->ports[i], n_frames);
-	MEMSET(buffer, 0, n_frames * sizeof(jack_default_audio_sample_t));
+	memset(buffer, 0, n_frames * sizeof(jack_default_audio_sample_t));
       }
     }
     has_started = false;

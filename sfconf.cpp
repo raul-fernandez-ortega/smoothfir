@@ -297,7 +297,7 @@ bool parse_sample_format(struct sample_format *sf, const string s, bool allow_au
 
 bool parse_coeff_sample_format(SF_INFO *sf, const string s)
 {
-  MEMSET(sf, 0, sizeof(SF_INFO));
+  memset(sf, 0, sizeof(SF_INFO));
 
   sf->channels = 1;
   
@@ -670,7 +670,7 @@ struct iodev* SfConf::parse_iodev(xmlNodePtr xmlnode, int io)
   int n;
 
   iodev = new struct iodev();
-  MEMSET(iodev, 0, sizeof(struct iodev));
+  memset(iodev, 0, sizeof(struct iodev));
   iodev->auto_format = true;
 
   while (xmlnode != NULL) {
@@ -919,7 +919,7 @@ void* SfConf::load_coeff(struct coeff *lcoeff, int cindex)
     if (strcmp(lcoeff->filename, "dirac pulse") == 0) {
 	len = lcoeff->coeff.n_blocks * sfconf->filter_length;
 	coeffsbuf = emalloc(len * sfconf->realsize);
-	MEMSET(coeffsbuf, 0, len * sfconf->realsize);
+	memset(coeffsbuf, 0, len * sfconf->realsize);
         if (sfconf->realsize == 4) {
             ((float *)coeffsbuf)[0] = 1.0;
         } else {
@@ -963,7 +963,7 @@ void* SfConf::load_coeff(struct coeff *lcoeff, int cindex)
     
     if (len < lcoeff->coeff.n_blocks * sfconf->filter_length) {
       zbuf = emalloc(sfconf->filter_length * sfconf->realsize);
-      MEMSET(zbuf, 0, sfconf->filter_length * sfconf->realsize);
+      memset(zbuf, 0, sfconf->filter_length * sfconf->realsize);
     }
     for (n = 0; n < lcoeff->coeff.n_blocks; n++) {
       if (n * sfconf->filter_length > len) {
@@ -1203,8 +1203,8 @@ void SfConf::sfconf_init(char *filename)
   }
   
   /* finish and sanity check filter structures */
-  MEMSET(used_channels, 0, sizeof(used_channels));
-  MEMSET(used_processes, 0, sizeof(used_processes));
+  memset(used_channels, 0, sizeof(used_channels));
+  memset(used_processes, 0, sizeof(used_processes));
   for (n = 0; n < sfconf->n_filters; n++) {
     /* coefficient name */
     if (pfilters[n]->coeff_name[0] == '\0') {
@@ -1247,7 +1247,7 @@ void SfConf::sfconf_init(char *filename)
     /* input/output names */
     FOR_IN_AND_OUT {
       /* channel input/outputs */
-      MEMSET(local_used_channels, 0, sizeof(local_used_channels));
+      memset(local_used_channels, 0, sizeof(local_used_channels));
       for (j = 0; j < pfilters[n]->filter.n_channels[IO]; j++) {
 	if (pfilters[n]->channel_name[IO][j].empty()) {
 	  if (pfilters[n]->filter.channels[IO][j] < 0 || pfilters[n]->filter.channels[IO][j] >= sfconf->n_channels[IO]) {
@@ -1278,7 +1278,7 @@ void SfConf::sfconf_init(char *filename)
       }
       
       /* filter input/outputs */
-      MEMSET(used_filters, 0, sizeof(used_filters));
+      memset(used_filters, 0, sizeof(used_filters));
       for (j = 0; j < pfilters[n]->filter.n_filters[IO]; j++) {
 	if (pfilters[n]->filter_name[IO][j].empty()) {
 	  if (pfilters[n]->filter.filters[IO][j] < 0 || pfilters[n]->filter.filters[IO][j] >= sfconf->n_filters) {
@@ -1411,7 +1411,7 @@ void SfConf::sfconf_init(char *filename)
   }
     
   n_channels[IN] = n_channels[OUT] = 0;
-  MEMSET(used_channels, 0, sizeof(used_channels));
+  memset(used_channels, 0, sizeof(used_channels));
   for (i = 0; i < sfconf->n_filters; i++) {
     filters.push_back(pfilters[i]->filter);
     sfconf->fproc.n_filters++;
@@ -1490,7 +1490,7 @@ void SfConf::sfconf_init(char *filename)
   }
   
   /* check which output channels that have dither applied */
-  MEMSET(apply_dither, 0, sizeof(apply_dither));
+  memset(apply_dither, 0, sizeof(apply_dither));
   /* verify if it is feasible to apply dither */
   if (iodevs[OUT]->ch.sf.isfloat) {
     if (!iodevs[OUT]->auto_format) {

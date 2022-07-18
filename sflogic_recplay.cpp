@@ -91,10 +91,10 @@ void SndFileManager::init(void)
 {
   if(sfconf->realsize == 4) {
     iobuffer = emalloc(2 * sfconf->filter_length* sizeof(float));
-    MEMSET((float*)iobuffer, 0, 2 * sfconf->filter_length * sizeof(float));
+    memset((float*)iobuffer, 0, 2 * sfconf->filter_length * sizeof(float));
   } else {
     iobuffer = emalloc(2 * sfconf->filter_length* sizeof(double));
-    MEMSET((double*)iobuffer, 0, 2 * sfconf->filter_length * sizeof(double));
+    memset((double*)iobuffer, 0, 2 * sfconf->filter_length * sizeof(double));
   }
   pthread_create(&manager_thread, NULL,&SndFileManager::readwriteProcessThread, this);
 }
@@ -158,15 +158,15 @@ void SndFileManager:: input_timed(void *buffer, int channel)
     if(isRunning && isOpen) {
       if(isWrite) {
 	if(sfconf->realsize == 4) {
-	  MEMCPY(&((float*)iobuffer)[0], &((float*)buffer)[sfconf->filter_length], sfconf->filter_length*sizeof(float));
+	  memcpy(&((float*)iobuffer)[0], &((float*)buffer)[sfconf->filter_length], sfconf->filter_length*sizeof(float));
 	} else {
-	  MEMCPY(&((double*)iobuffer)[0], &((double*)buffer)[sfconf->filter_length], sfconf->filter_length*sizeof(double));
+	  memcpy(&((double*)iobuffer)[0], &((double*)buffer)[sfconf->filter_length], sfconf->filter_length*sizeof(double));
 	}
       } else {
        	if(sfconf->realsize == 4) {
-	  MEMCPY(&((float*)buffer)[sfconf->filter_length], &((float*)iobuffer)[0], sfconf->filter_length*sizeof(float));
+	  memcpy(&((float*)buffer)[sfconf->filter_length], &((float*)iobuffer)[0], sfconf->filter_length*sizeof(float));
 	} else {
-	  MEMCPY(&((double*)buffer)[sfconf->filter_length], &((double*)iobuffer)[0], sfconf->filter_length*sizeof(double));
+	  memcpy(&((double*)buffer)[sfconf->filter_length], &((double*)iobuffer)[0], sfconf->filter_length*sizeof(double));
 	}
       }
       sem_post(&manager_sem);
@@ -181,15 +181,15 @@ void SndFileManager::output_timed(void *buffer, int channel)
     if(isRunning && isOpen) {
       if(isWrite) {
 	if(sfconf->realsize == 4) {
-	  MEMCPY(&((float*)iobuffer)[0], &((float*)buffer)[sfconf->filter_length], sfconf->filter_length*sizeof(float));
+	  memcpy(&((float*)iobuffer)[0], &((float*)buffer)[sfconf->filter_length], sfconf->filter_length*sizeof(float));
 	} else {
-	  MEMCPY(&((double*)iobuffer)[0], &((double*)buffer)[sfconf->filter_length], sfconf->filter_length*sizeof(double));
+	  memcpy(&((double*)iobuffer)[0], &((double*)buffer)[sfconf->filter_length], sfconf->filter_length*sizeof(double));
 	}
       } else {
 	if(sfconf->realsize == 4) {
-	  MEMCPY(&((float*)buffer)[sfconf->filter_length], &((float*)iobuffer)[0], sfconf->filter_length*sizeof(float));
+	  memcpy(&((float*)buffer)[sfconf->filter_length], &((float*)iobuffer)[0], sfconf->filter_length*sizeof(float));
 	} else {
-	  MEMCPY(&((double*)buffer)[sfconf->filter_length], &((double*)iobuffer)[0], sfconf->filter_length*sizeof(double));
+	  memcpy(&((double*)buffer)[sfconf->filter_length], &((double*)iobuffer)[0], sfconf->filter_length*sizeof(double));
 	}
       }
       sem_post(&manager_sem);
@@ -210,7 +210,7 @@ int SFLOGIC_RECPLAY::preinit(xmlNodePtr sfparams, int _debug)
 {
   debug = !!_debug;
   
-  MEMSET(msg, 0, MAX_MSG_LEN);
+  memset(msg, 0, MAX_MSG_LEN);
   while (sfparams != NULL) {
     if (!xmlStrcmp(sfparams->name, (const xmlChar *)"file")) {
       managers.push_back(new SndFileManager(sfconf,icomm, sfaccess));

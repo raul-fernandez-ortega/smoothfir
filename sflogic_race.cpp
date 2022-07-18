@@ -48,7 +48,7 @@ bool SFLOGIC_RACE::finalise_RACE(void)
   RACEFilter.mag = new double [RACEFilter.band_count];
   RACEFilter.phase = new double [RACEFilter.band_count];
 
-  MEMSET(RACEFilter.phase, 0, RACEFilter.band_count * sizeof(double));
+  memset(RACEFilter.phase, 0, RACEFilter.band_count * sizeof(double));
   RACEFilter.freq[0] = 0;
   RACEFilter.mag[0] = 0;
   
@@ -93,7 +93,7 @@ SFLOGIC_RACE::SFLOGIC_RACE(struct sfconf *_sfconf,
   //strcpy(debug_dump_filter_path, "./direct.raw");
   debug = false;
   name = "race";
-  MEMSET(msg, 0, MAX_MSG_LEN);
+  memset(msg, 0, MAX_MSG_LEN);
 }
 
 int SFLOGIC_RACE::preinit(xmlNodePtr sfparams, int _debug)

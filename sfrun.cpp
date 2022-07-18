@@ -284,7 +284,7 @@ void SfRun::rti_and_overflow(void)
   
   if (icomm->doreset_overflow) {
     icomm->doreset_overflow = false;
-    MEMSET(overflow, 0, sizeof(struct sfoverflow) * sfconf->n_channels[OUT]);
+    memset(overflow, 0, sizeof(struct sfoverflow) * sfconf->n_channels[OUT]);
   }
 
   /* calculate realtime index */
@@ -395,7 +395,7 @@ bool SfRun::test_silent(void *buf,
     return false;
   }
   /* make it truly zero */
-  MEMSET(buf, 0, size);
+  memset(buf, 0, size);
   return true;
 }
 
@@ -497,14 +497,14 @@ void SfRun::filter_process(void)
     change_prio = true;
   }
   temp_buffer_zero = false;
-  MEMSET(procblocks, 0, sfconf->fproc.n_filters * sizeof(int));
-  MEMSET(partial_proc, 0xFF, (sfconf->fproc.n_filters / 32 + 1) * sizeof(uint32_t));
-  MEMSET(evalbuf_zero, 0, sfconf->fproc.n_filters * sizeof(bool));
-  MEMSET(ocbuf_zero, 0, sfconf->fproc.n_filters * sizeof(bool));
-  MEMSET(cbuf_zero, 0, n_blocks * sfconf->fproc.n_filters * sizeof(bool));
-  MEMSET(output_freqcbuf_zero, 0, sfconf->n_channels[OUT] * sizeof(bool));
-  MEMSET(input_freqcbuf_zero, 0, sfconf->n_channels[IN] * sizeof(bool));
-  MEMSET(crossfadebuf, 0, sizeof(crossfadebuf));
+  memset(procblocks, 0, sfconf->fproc.n_filters * sizeof(int));
+  memset(partial_proc, 0xFF, (sfconf->fproc.n_filters / 32 + 1) * sizeof(uint32_t));
+  memset(evalbuf_zero, 0, sfconf->fproc.n_filters * sizeof(bool));
+  memset(ocbuf_zero, 0, sfconf->fproc.n_filters * sizeof(bool));
+  memset(cbuf_zero, 0, n_blocks * sfconf->fproc.n_filters * sizeof(bool));
+  memset(output_freqcbuf_zero, 0, sfconf->n_channels[OUT] * sizeof(bool));
+  memset(input_freqcbuf_zero, 0, sfconf->n_channels[IN] * sizeof(bool));
+  memset(crossfadebuf, 0, sizeof(crossfadebuf));
   
   if (sem_wait(&bl_input_2_filter_sem)==-1) { /* for init */
     if (sfconf != NULL && sfconf->debug) {
@@ -690,7 +690,7 @@ void SfRun::filter_process(void)
   
   /* for each unique output channel, find out which filters that
      mixes its output to it */
-  MEMSET(outconvbuf_n_filters, 0, sizeof(outconvbuf_n_filters));
+  memset(outconvbuf_n_filters, 0, sizeof(outconvbuf_n_filters));
   for (n = 0; n < sfconf->fproc.n_unique_channels[OUT]; n++) {
     for (i = 0; i < sfconf->fproc.n_filters; i++) {
       for (j = 0; j < sfconf->fproc.filters[i].n_channels[OUT]; j++) {
@@ -727,22 +727,22 @@ void SfRun::filter_process(void)
   
   /* access all memory while being nobody, so we don't risk getting killed
      later if memory is scarce */
-  MEMSET(baseptr, 0, memsize);    
+  memset(baseptr, 0, memsize);    
   for (n = 0; n < sfconf->n_coeffs; n++) {
     for (i = 0; i < sfconf->coeffs[n].n_blocks; i++) {
-      MEMCPY(ocbuf[0], sfconf->coeffs_data[n][i], convbufsize);
+      memcpy(ocbuf[0], sfconf->coeffs_data[n][i], convbufsize);
     }
   }
-  MEMSET(ocbuf[0], 0, convbufsize);
-  MEMSET(sfDai->buffers[IN][0], 0, sfDai->dai_buffer_format[IN]->n_bytes);
-  MEMSET(sfDai->buffers[IN][1], 0, sfDai->dai_buffer_format[IN]->n_bytes);
-  MEMSET(sfDai->buffers[OUT][0], 0, sfDai->dai_buffer_format[OUT]->n_bytes);
-  MEMSET(sfDai->buffers[OUT][1], 0, sfDai->dai_buffer_format[OUT]->n_bytes);
+  memset(ocbuf[0], 0, convbufsize);
+  memset(sfDai->buffers[IN][0], 0, sfDai->dai_buffer_format[IN]->n_bytes);
+  memset(sfDai->buffers[IN][1], 0, sfDai->dai_buffer_format[IN]->n_bytes);
+  memset(sfDai->buffers[OUT][0], 0, sfDai->dai_buffer_format[OUT]->n_bytes);
+  memset(sfDai->buffers[OUT][1], 0, sfDai->dai_buffer_format[OUT]->n_bytes);
   for (n = 0; n < sfconf->fproc.n_unique_channels[IN]; n++) {
-    MEMSET(input_freqcbuf[sfconf->fproc.unique_channels[IN][n]], 0, convbufsize);
+    memset(input_freqcbuf[sfconf->fproc.unique_channels[IN][n]], 0, convbufsize);
   }
   for (n = 0; n < sfconf->fproc.n_unique_channels[OUT]; n++) {
-    MEMSET(output_freqcbuf[sfconf->fproc.unique_channels[OUT][n]], 0, convbufsize);
+    memset(output_freqcbuf[sfconf->fproc.unique_channels[OUT][n]], 0, convbufsize);
   }
   
   if (sem_post(&filter_2_bl_output_sem)==-1) { // for init
@@ -753,7 +753,7 @@ void SfRun::filter_process(void)
   }
   
   /* main filter loop starts here */
-  MEMSET(t, 0, sizeof(t));
+  memset(t, 0, sizeof(t));
   while (isRunning) {
     gettimeofday(&period_end, NULL);
     
@@ -799,8 +799,8 @@ void SfRun::filter_process(void)
 	icomm_fctrl[n].fscale[i] = icomm->fctrl[sfconf->fproc.filters[n].intname].fscale[i];
       }
     }    
-    MEMCPY(icomm_ismuted, icomm->ismuted, sizeof(icomm_ismuted));
-    //MEMCPY(icomm_delay, icomm->delay, sizeof(icomm_delay));
+    memcpy(icomm_ismuted, icomm->ismuted, sizeof(icomm_ismuted));
+    //memcpy(icomm_delay, icomm->delay, sizeof(icomm_delay));
     FOR_IN_AND_OUT {
       icomm_delay[IO] = icomm->delay[IO];
     }
@@ -827,7 +827,7 @@ void SfRun::filter_process(void)
 	  sfDelay->delay_update(input_db[virtch], &((uint8_t *)sfDai->buffers[IN][curbuf])[sf->byte_offset], sf->sf.bytes, sf->sample_spacing, delay, inbuf_copy);
 
 	} else {
-	  MEMSET(inbuf_copy, 0, fragsize * sf->sf.bytes);
+	  memset(inbuf_copy, 0, fragsize * sf->sf.bytes);
 	}
 	inbuf_copy_sf.sf = sf->sf;
 	of = icomm->in_overflow[virtch];
@@ -846,7 +846,7 @@ void SfRun::filter_process(void)
 	sfConv->convolver_time2freq(input_timecbuf[n][curbuf], input_freqcbuf[channels[IN][n]]);
 	input_freqcbuf_zero[channels[IN][n]] = false;
       } else if (!input_freqcbuf_zero[channels[IN][n]]) {
-	MEMSET(input_freqcbuf[channels[IN][n]], 0, convbufsize);
+	memset(input_freqcbuf[channels[IN][n]], 0, convbufsize);
 	input_freqcbuf_zero[channels[IN][n]] = true;
       }
       timestamp(&t2);
@@ -906,7 +906,7 @@ void SfRun::filter_process(void)
 				      CONVOLVER_MIXMODE_OUTPUT);
 	  temp_buffer_zero = false;
 	} else if (!temp_buffer_zero) {
-	  MEMSET(static_evalbuf, 0, convbufsize);
+	  memset(static_evalbuf, 0, convbufsize);
 	  temp_buffer_zero = true;
 	}
         
@@ -942,7 +942,7 @@ void SfRun::filter_process(void)
 				      CONVOLVER_MIXMODE_INPUT);
 	  cbuf_zero[n][curblock] = false;
 	} else if (!cbuf_zero[n][curblock]) {
-	  MEMSET(cbuf[n][curblock], 0, convbufsize);
+	  memset(cbuf[n][curblock], 0, convbufsize);
 	  cbuf_zero[n][curblock] = true;
 	}
       } else {
@@ -961,7 +961,7 @@ void SfRun::filter_process(void)
 				      CONVOLVER_MIXMODE_INPUT);
 	  cbuf_zero[n][curblock] = false;
 	} else if (!cbuf_zero[n][curblock]) {
-	  MEMSET(cbuf[n][curblock], 0, convbufsize);
+	  memset(cbuf[n][curblock], 0, convbufsize);
                     cbuf_zero[n][curblock] = true;
 	}
       }
@@ -1011,7 +1011,7 @@ void SfRun::filter_process(void)
 	    sfConv->convolver_convolve(cbuf[n][curblock], sfconf->coeffs_data[coeff][0], ocbuf[n]);
 	    ocbuf_zero[n] = false;
 	  } else if (!ocbuf_zero[n]) {
-	    MEMSET(ocbuf[n], 0, convbufsize);
+	    memset(ocbuf[n], 0, convbufsize);
 	    ocbuf_zero[n] = true;
 	  }
 	  for (i = 1; i < cblocks && i < procblocks[n]; i++) {
@@ -1065,7 +1065,7 @@ void SfRun::filter_process(void)
 	    sfConv->convolver_dirac_convolve(cbuf[n][curblock], ocbuf[n]);
 	    ocbuf_zero[n] = false;
 	  } else if (!ocbuf_zero[n]) {
-	    MEMSET(ocbuf[n], 0, convbufsize);
+	    memset(ocbuf[n], 0, convbufsize);
 	    ocbuf_zero[n] = true;
 	  }
 	  if (sfconf->fproc.filters[n].crossfade && prevcoeff[n] != coeff) {
@@ -1110,7 +1110,7 @@ void SfRun::filter_process(void)
 				    CONVOLVER_MIXMODE_OUTPUT);
 	output_freqcbuf_zero[sfconf->fproc.unique_channels[OUT][n]] = false;
       } else if (!output_freqcbuf_zero[sfconf->fproc.unique_channels[OUT][n]]) {
-	MEMSET(output_freqcbuf[sfconf->fproc.unique_channels[OUT][n]], 0, convbufsize);
+	memset(output_freqcbuf[sfconf->fproc.unique_channels[OUT][n]], 0, convbufsize);
 	output_freqcbuf_zero[sfconf->fproc.unique_channels[OUT][n]] = true;
       }
     }
@@ -1138,7 +1138,7 @@ void SfRun::filter_process(void)
 	  cbuf_zero[0][0] = false;
 	}
       } else if (!ocbuf_zero[0]) {
-	MEMSET(ocbuf[0], 0, convbufsize);
+	memset(ocbuf[0], 0, convbufsize);
 	ocbuf_zero[0] = true;
 	if (n_blocks == 1) {
 	  cbuf_zero[0][0] = true;
@@ -1180,7 +1180,7 @@ void SfRun::filter_process(void)
 	sfDelay->delay_update(output_db[virtch], ocbuf[0], sfconf->realsize, 1, delay, NULL);
 	if (!bit_isset(icomm_ismuted[OUT], virtch)) {
 	  if (!mixbuf_is_filled) {
-	    MEMCPY(mixbuf, ocbuf[0], fragsize * sfconf->realsize);
+	    memcpy(mixbuf, ocbuf[0], fragsize * sfconf->realsize);
 	  } else {
 	    if (sfconf->realsize == 4) {
 	      for (i = 0; i < fragsize; i += 4) {
@@ -1206,7 +1206,7 @@ void SfRun::filter_process(void)
 	    /* we cannot set temp_buffer_zero here since
 	       fragsize * sfconf->realsize is smaller than
 	       convbufsize */
-	    MEMSET(mixbuf, 0, fragsize * sfconf->realsize);
+	    memset(mixbuf, 0, fragsize * sfconf->realsize);
 	  }
 	  j = 0;
 	  mixbuf_is_filled = false;
@@ -1282,7 +1282,7 @@ freq2time |  real2raw |     total | periods | rti \n\
 		(double)t[7] * clockmul,
 		(unsigned long int)cc,
 		icomm->realtime_index);
-	MEMSET(t, 0, sizeof(t));
+	memset(t, 0, sizeof(t));
       }
     }
     
@@ -1419,7 +1419,7 @@ void SfRun::preinit(Convolver *_sfConv, Delay *_sfDelay, vector<SFLOGIC*> _sflog
   
   /* init overflow structure */
   reset_overflow_out = new struct sfoverflow [sfconf->n_channels[OUT]];
-  MEMSET(reset_overflow_out, 0, sizeof(struct sfoverflow) * sfconf->n_channels[OUT]);
+  memset(reset_overflow_out, 0, sizeof(struct sfoverflow) * sfconf->n_channels[OUT]);
   for (n = 0; n < sfconf->n_channels[OUT]; n++) {
     physch = sfconf->virt2phys[OUT][n];
     if (sfDai->dai_buffer_format[OUT]->bf[physch].sf.isfloat) {
@@ -1431,7 +1431,7 @@ void SfRun::preinit(Convolver *_sfConv, Delay *_sfDelay, vector<SFLOGIC*> _sflog
   }
   
   reset_overflow_in = new struct sfoverflow [sfconf->n_channels[IN]];
-  MEMSET(reset_overflow_in, 0, sizeof(struct sfoverflow) * sfconf->n_channels[IN]);
+  memset(reset_overflow_in, 0, sizeof(struct sfoverflow) * sfconf->n_channels[IN]);
   for (n = 0; n < sfconf->n_channels[IN]; n++) {
     physch = sfconf->virt2phys[IN][n];
     if (sfDai->dai_buffer_format[IN]->bf[physch].sf.isfloat) {
@@ -1556,7 +1556,7 @@ void SfRun::sfrun(Convolver *_sfConv, Delay *_sfDelay, vector<SFLOGIC*> _sflogic
   
   /* init overflow structure */
   reset_overflow_out = new struct sfoverflow [sfconf->n_channels[OUT]];
-  MEMSET(reset_overflow_out, 0, sizeof(struct sfoverflow) * sfconf->n_channels[OUT]);
+  memset(reset_overflow_out, 0, sizeof(struct sfoverflow) * sfconf->n_channels[OUT]);
   for (n = 0; n < sfconf->n_channels[OUT]; n++) {
     physch = sfconf->virt2phys[OUT][n];
     if (sfDai->dai_buffer_format[OUT]->bf[physch].sf.isfloat) {
@@ -1568,7 +1568,7 @@ void SfRun::sfrun(Convolver *_sfConv, Delay *_sfDelay, vector<SFLOGIC*> _sflogic
   }  
 
   reset_overflow_in = new struct sfoverflow [sfconf->n_channels[IN]];
-  MEMSET(reset_overflow_in, 0, sizeof(struct sfoverflow) * sfconf->n_channels[IN]);
+  memset(reset_overflow_in, 0, sizeof(struct sfoverflow) * sfconf->n_channels[IN]);
   for (n = 0; n < sfconf->n_channels[IN]; n++) {
     physch = sfconf->virt2phys[IN][n];
     if (sfDai->dai_buffer_format[IN]->bf[physch].sf.isfloat) {
@@ -1787,7 +1787,7 @@ void SfRun::sf_make_realtime(pid_t pid,
     return;
   }
   
-  MEMSET(&schp, 0, sizeof(schp));
+  memset(&schp, 0, sizeof(schp));
   schp.sched_priority = priority;
   
   if (sched_setscheduler(pid, SCHED_FIFO, &schp) != 0) {
@@ -1933,7 +1933,7 @@ void SfRun::convolver_raw2cbuf(void *rawbuf,
 	      sf->sf.sbytes << 3, sf->sf.bytes, (sf->sf.bytes - sf->sf.sbytes) << 3,
 	      sf->sf.isfloat, sf->sample_spacing, sf->sf.swap, sfconf->filter_length, overflow);
   }
-  MEMCPY(&((uint8_t *)cbuf)[sfconf->filter_length * sfconf->realsize], next_cbuf, sfconf->filter_length * sfconf->realsize);
+  memcpy(&((uint8_t *)cbuf)[sfconf->filter_length * sfconf->realsize], next_cbuf, sfconf->filter_length * sfconf->realsize);
 }
 
 void SfRun::convolver_cbuf2raw(void *cbuf,

@@ -53,7 +53,7 @@ setup(
                                                   "sfconf.cpp", "sfdai.cpp", "iojack.cpp", "smoothfir.cpp", "sfdelay.cpp", "sfdither.cpp" ],
                              extra_compile_args=['-I/usr/include/libxml2'],
                              include_dirs=["."],
-                             libraries=["fftw3", "fftw3f", "m", "dl", "xml2", "sndfile", "jack", "aelf32op"],
+                             libraries=["fftw3", "fftw3f", "xml2", "sndfile", "jack"],
                              extra_objects=[ "emalloc.o", "fftw_convolver.o", "convolver_xmm.o", "shmalloc.o","firwindow.o"]
                              
                              )]

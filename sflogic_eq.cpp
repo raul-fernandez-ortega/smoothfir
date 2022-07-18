@@ -62,7 +62,7 @@ bool SFLOGIC_EQ::finalise_equaliser(struct realtime_eq *eq,
   }
   eq->freq[1+n] = (double)sfconf->sampling_rate / 2.0;                
   
-  MEMSET(eq->mag, 0, band_count * sizeof(double));
+  memset(eq->mag, 0, band_count * sizeof(double));
   for (n = 0, i = 0; n < n_mag; n++) {
     while (mfreq[n] > eq->freq[i]) {
       i++;
@@ -76,7 +76,7 @@ bool SFLOGIC_EQ::finalise_equaliser(struct realtime_eq *eq,
   eq->mag[0] = eq->mag[1];
   eq->mag[band_count - 1] = eq->mag[band_count - 2];
   
-  MEMSET(eq->phase, 0, band_count * sizeof(double));
+  memset(eq->phase, 0, band_count * sizeof(double));
   for (n = 0, i = 0; n < n_phase; n++) {
     while (pfreq[n] > eq->freq[i]) {
       i++;
@@ -122,11 +122,11 @@ SFLOGIC_EQ::SFLOGIC_EQ(struct sfconf *_sfconf,
   name = "eq";
 
   fork_mode = SF_FORK_DONT_FORK;  
-  MEMSET(msg, 0, MAX_MSG_LEN);
+  memset(msg, 0, MAX_MSG_LEN);
 
   equalisers = new struct realtime_eq [MAX_EQUALISERS];
   for(n = 0; n < MAX_EQUALISERS; n++) {
-    MEMSET(&equalisers[n], 0, sizeof(struct realtime_eq));
+    memset(&equalisers[n], 0, sizeof(struct realtime_eq));
     equalisers[n].coeff[0] = -1;
     equalisers[n].coeff[1] = -1;
   }
@@ -580,7 +580,7 @@ bool SFLOGIC_EQ::change_rendering(int n_eq)
   case CMD_GET_INFO:
     eq = &equalisers[eq_index];
     p = msg;
-    MEMSET(rmsg, 0, sizeof(rmsg));
+    memset(rmsg, 0, sizeof(rmsg));
     if (eq->coeff[0] == eq->coeff[1]) {
       sprintf(p, "coefficient %d:\n band: ", eq->coeff[0]);
     } else {
@@ -743,7 +743,7 @@ bool SFLOGIC_EQ::change_rendering(int n_eq)
   case CMD_GET_INFO:
     eq = &equalisers[eq_index];
     p = msg;
-    MEMSET(rmsg, 0, sizeof(rmsg));
+    memset(rmsg, 0, sizeof(rmsg));
     if (eq->coeff[0] == eq->coeff[1]) {
       sprintf(p, "coefficient %d:\n band: ", eq->coeff[0]);
     } else {
