@@ -6,7 +6,7 @@ Smoothfir is a fork of Brutefir, a convolution device developed for digital audi
 As usual for python modules:
 
 python setup.py build    ----> As user for compiling code.\
-python setuup.py install ----> As root for install python module smoothfir.
+python setup.py install ----> As root for install python module smoothfir.
 
 ## Usage
 
