@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2013 -- Raul Fernandez Ortega
+ * (c) Copyright 2013/2022 -- Raul Fernandez Ortega
  *
  * This program is open source. For license terms, see the LICENSE file.
  *
@@ -10,15 +10,6 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#ifdef ASMLIB
-#include "asmlib.h"
-  #define MEMCPY A_memcpy
-  #define MEMSET A_memset
-#else
-  #define MEMCPY memcpy
-  #define MEMSET memset
-#endif
 
 #include "defs.h"
 

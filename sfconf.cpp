@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2013 -- Raul Fernandez
+ * (c) Copyright 2013/2022 -- Raul Fernandez
  *
  * This program is open source. For license terms, see the LICENSE file.
  *
@@ -1032,7 +1032,7 @@ void SfConf::sfconf_init(char *filename)
   int rlogic;
   
   xmlDocPtr xmlconf;
-  xmlNodePtr xmlnode;
+  xmlNodePtr xmlnode, xmlchildren, xmlsmoothfir;
   
   gettimeofday(&tv1, NULL);
   timestamp(&t1);
@@ -1061,18 +1061,34 @@ void SfConf::sfconf_init(char *filename)
     exit(SF_EXIT_OTHER);
   }
   xmlnode = xmlnode->children;
-  
-  while (xmlStrcmp(xmlnode->name, (const xmlChar *)"smoothfir")) {
-    xmlnode = xmlnode->next;
-    if (xmlnode == NULL) {
-      fprintf(stderr,"<smoothfir> token not found.\n");
-      xmlCleanupParser();
-      xmlFreeDoc(xmlconf);
-      exit(SF_EXIT_OTHER);
+  xmlsmoothfir = NULL;
+
+  while (xmlnode !=NULL) {
+    if (!xmlStrcmp(xmlnode->name, (const xmlChar *)"smoothfir")) {
+      fprintf(stderr,"<smoothfir> token found.\n");
+      xmlsmoothfir = xmlnode;
+      break;
+    } else {
+      xmlchildren = xmlnode->children;
+      while (xmlchildren != NULL) {
+	if (!xmlStrcmp(xmlchildren->name, (const xmlChar *)"smoothfir")) {
+	  fprintf(stderr,"<smoothfir> token found.\n");
+	  xmlsmoothfir = xmlchildren;
+	  break;
+	}	
+	xmlchildren = xmlchildren->next;
+      }
     }
+    xmlnode = xmlnode->next;
+  }
+  if (xmlsmoothfir == NULL) {
+    fprintf(stderr,"<smoothfir> token not found.\n");
+    xmlCleanupParser();
+    xmlFreeDoc(xmlconf);
+    exit(SF_EXIT_OTHER);
   }
   maxdelay[IN] = maxdelay[OUT] = 0;
-  xmlnode = xmlnode->children;
+  xmlnode = xmlsmoothfir->children;
   while (xmlnode != NULL)  {
     if (!xmlStrcmp(xmlnode->name, (const xmlChar *)"globals")) {
       parse_setting(xmlnode->children, &repeat_bitset);

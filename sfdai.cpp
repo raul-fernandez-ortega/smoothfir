@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2012 -- Raul Fernandez
+ * (c) Copyright 2012/2022 -- Raul Fernandez
  *
  * This program is open source. For license terms, see the LICENSE file.
  *

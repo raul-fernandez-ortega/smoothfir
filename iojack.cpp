@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2013 -- Raul Fernandez Ortega
+ * (c) Copyright 2013/2022 -- Raul Fernandez Ortega
  *
  * This program is open source. For license terms, see the LICENSE file.
  *
@@ -399,7 +399,7 @@ int ioJack::init(int io,
     
     port = jack_port_register(client, name, JACK_DEFAULT_AUDIO_TYPE, (io == IN ? JackPortIsInput : JackPortIsOutput), 0);
     if (port == NULL) {
-      fprintf(stderr, "JACK I/O: Failed to open new JACK port %s:%s.\n", name);
+      fprintf(stderr, "JACK I/O: Failed to open new JACK port.\n");
       return -1;
     }
     /*if (io == OUT) {
