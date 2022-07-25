@@ -17,7 +17,7 @@ extern "C" {
 
 #include <vector>
 
-#include "bfclasses.hpp"
+//#include "bfclasses.hpp"
 
 using namespace std;
 
@@ -25,14 +25,14 @@ class IO {
 
 public:
 
-  struct bfconf *bfconf;
+  struct sfconf *sfconf;
   struct intercomm_area *icomm;
   struct iodev *iodev;
   int sample_format;
   int sample_rate;
 
-  IO(struct bfconf *_bfconf,
-     struct intercomm_area *_icomm) : bfconf(_bfconf), icomm(_icomm) {};
+  IO(struct sfconf *_sfconf,
+     struct intercomm_area *_icomm) : sfconf(_sfconf), icomm(_icomm) {};
   
   ~IO(void) {};
 
@@ -47,7 +47,7 @@ public:
 		   //bool *isinterleaved,
 		   struct subdev *callback_subdev) { return 0; };
 
-  virtual int bfio_cb_init(void *params) { return 0; };
+  //virtual int bfio_cb_init(void *params) { return 0; };
 
   //virtual int read(int fd, void *buf, int offset, int count) { return 0; };
 

@@ -67,7 +67,12 @@ bool SFLOGIC_RACE::finalise_RACE(void)
   RACEFilter.freq[5] = highFreq/sfconf->sampling_rate;
   RACEFilter.mag[5] = 1;
 
-  RACEFilter.freq[6] = 2*highFreq/sfconf->sampling_rate;
+  if(2*highFreq/sfconf->sampling_rate < 0.48) {
+    RACEFilter.freq[6] = 2*highFreq/sfconf->sampling_rate;
+  }
+  else {
+    RACEFilter.freq[6] = 0.48;
+  }
   RACEFilter.mag[6] = pow(10, (double)-highSlope/20);
 
   RACEFilter.freq[7] = 0.5;
@@ -226,13 +231,13 @@ bool SFLOGIC_RACE::change_config(float nscale, float ndelay, float nlowFreq, flo
   if (!finalise_RACE()) {
     return false;
   }
-
+  
   if (sfconf->realsize == 4) {
     render_race_f();
   } else {
     render_race_d();
   }
   return true;
-}
+  }
 
 

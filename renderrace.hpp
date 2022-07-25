@@ -50,6 +50,7 @@ void RENDER_RACE_NAME()
   // RACE Frequency Filter
   fftw_buf[n][0] = (double)eqmag[0] * divtaps;
   fftw_buf[n][1] = 0;
+
   for (n = 1, i = 0; n < (RACEFilter.taps << 1); n++) {
     curfreq = (real_t)n * divtaps;
     while (curfreq > eqfreq[i+1]) {

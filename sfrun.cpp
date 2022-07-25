@@ -301,9 +301,9 @@ void SfRun::rti_and_overflow(void)
     }
     if (sfconf->show_progress && max_rti != 0) {
       if (full_proc) {
-	pinfo("rti: %.3f ---- ", max_rti);
+	pinfo("rti: %.3f ---- \n", max_rti);
       } else {
-	pinfo("rti: not full processing - no rti update ---- ");
+	pinfo("rti: not full processing - no rti update ---- \n");
       }
     }
     icomm->realtime_index = max_rti;
