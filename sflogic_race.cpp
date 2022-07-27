@@ -67,17 +67,19 @@ bool SFLOGIC_RACE::finalise_RACE(void)
   RACEFilter.freq[5] = highFreq/sfconf->sampling_rate;
   RACEFilter.mag[5] = 1;
 
-  if(2*highFreq/sfconf->sampling_rate < 0.48) {
-    RACEFilter.freq[6] = 2*highFreq/sfconf->sampling_rate;
-  }
-  else {
-    RACEFilter.freq[6] = 0.48;
-  }
-  RACEFilter.mag[6] = pow(10, (double)-highSlope/20);
-
+  RACEFilter.freq[6] = (0.5 + highFreq/sfconf->sampling_rate)/2;
+  RACEFilter.mag[6] = pow(10, (double)-highSlope/10*(((0.5 + highFreq/sfconf->sampling_rate)/2/(highFreq/sfconf->sampling_rate))-1));
+  
   RACEFilter.freq[7] = 0.5;
-  RACEFilter.mag[7] = 0;
+  RACEFilter.mag[7] = pow(10, (double)-highSlope/10*(0.50*sfconf->sampling_rate/highFreq-1));;
 
+  if (debug) {
+    fprintf(stderr, "RACE Filter frequency coeffs:\n");
+    fprintf(stderr, "Frequency (Hz)       Coeffs\n");
+    for(n = 0; n < 8; n++) {
+      fprintf(stderr, "%f %f\n",RACEFilter.freq[n]*sfconf->sampling_rate, (double)10*log10(RACEFilter.mag[n]));
+    }
+  }
   for (n = i = 0; n < 2; n++) {
     if ((i = log2_get(sfconf->filter_length * sfconf->coeffs[RACEFilter.direct_coeff].n_blocks)) == -1) {
       fprintf(stderr, "RACE: Coefficient %d length is not a power of two.\n", RACEFilter.direct_coeff);
@@ -93,7 +95,8 @@ SFLOGIC_RACE::SFLOGIC_RACE(struct sfconf *_sfconf,
 			   SfAccess *_sfaccess)  : SFLOGIC(_sfconf, _icomm, _sfaccess)
 {
   unique = false;
-  debug_dump_filter_path = NULL;
+  dump_direct_file = NULL;
+  dump_cross_file = NULL;
   //debug_dump_filter_path = new char [12];
   //strcpy(debug_dump_filter_path, "./direct.raw");
   debug = false;
@@ -128,9 +131,13 @@ int SFLOGIC_RACE::preinit(xmlNodePtr sfparams, int _debug)
 	}
       }
       if (n == sfconf->n_coeffs) {
-	fprintf(stderr, "RACE: Unknown coefficient name for cross RACE filter.\n");
+	fprintf(stderr, "RACE: Unknown coefficient name for direct RACE filter.\n");
 	return -1;
       }
+    } else if (!xmlStrcmp(sfparams->name, (const xmlChar *)"dump_direct_file")) {
+      dump_direct_file = estrdup((char*)xmlNodeGetContent(sfparams));
+    } else if (!xmlStrcmp(sfparams->name, (const xmlChar *)"dump_cross_file")) {
+      dump_cross_file = estrdup((char*)xmlNodeGetContent(sfparams));   
     } else if (!xmlStrcmp(sfparams->name, (const xmlChar *)"attenuation")) {
       scale = strtof((char*)xmlNodeGetContent(sfparams), NULL);
     } else if (!xmlStrcmp(sfparams->name, (const xmlChar *)"delay")) {

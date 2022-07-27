@@ -30,6 +30,8 @@ extern "C" {
 
 #include <fftw3.h>
 
+#include <sndfile.h>
+  
 #ifdef __cplusplus
 }
 #endif 
@@ -79,10 +81,13 @@ private:
   void *d_rbuf;
   void *c_rbuf;
   int maxblocks;
-
+  char *dump_direct_file;
+  char *dump_cross_file;
+  SNDFILE* sf_direct_file;
+  SNDFILE* sf_cross_file;
+  SF_INFO sf_info;
   int n_coeffs;
   int n_filters;
-  char *debug_dump_filter_path;
   int render_postponed_index;
   
   char * strtrim(char s[]);
