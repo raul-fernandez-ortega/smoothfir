@@ -22,10 +22,10 @@ extern "C" {
 
 #include <jack/jack.h>
 
+}
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-}
 
 #include "defs.h"
 #include "sfmod.h"

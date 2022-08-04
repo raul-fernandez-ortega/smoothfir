@@ -8,19 +8,21 @@
 #ifndef _SFLOGIC_HPP_
 #define _SFLOGIC_HPP_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "bit.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif 
+}
+#endif
 
 #include <string.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#ifdef __cplusplus
-}
-#endif 
+ 
 
 #include <string>
 #include <vector>

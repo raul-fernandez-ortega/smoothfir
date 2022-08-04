@@ -3,12 +3,10 @@
 #
 # Do not make changes to this file unless you know what you are doing--modify
 # the SWIG interface file instead.
-# *
-# * (c) Copyright 2013/2022 -- Raul Fernandez Ortega
-# *
-# * This program is open source. For license terms, see the LICENSE file.
-# *
-# *
+
+
+
+
 
 from sys import version_info
 if version_info >= (2,6,0):
@@ -908,14 +906,230 @@ class SfConf(_object):
 SfConf_swigregister = _smoothfir.SfConf_swigregister
 SfConf_swigregister(SfConf)
 
+class SfCallback(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SfCallback, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SfCallback, name)
+    __repr__ = _swig_repr
+    def __init__(self): 
+        this = _smoothfir.new_SfCallback()
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _smoothfir.delete_SfCallback
+    __del__ = lambda self : None;
+    def sf_callback_ready(self, *args): return _smoothfir.SfCallback_sf_callback_ready(self, *args)
+    def rti_and_overflow(self): return _smoothfir.SfCallback_rti_and_overflow(self)
+SfCallback_swigregister = _smoothfir.SfCallback_swigregister
+SfCallback_swigregister(SfCallback)
+
+class SfAccess(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SfAccess, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SfAccess, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["overflow"] = _smoothfir.SfAccess_overflow_set
+    __swig_getmethods__["overflow"] = _smoothfir.SfAccess_overflow_get
+    if _newclass:overflow = _swig_property(_smoothfir.SfAccess_overflow_get, _smoothfir.SfAccess_overflow_set)
+    __swig_setmethods__["dummy"] = _smoothfir.SfAccess_dummy_set
+    __swig_getmethods__["dummy"] = _smoothfir.SfAccess_dummy_get
+    if _newclass:dummy = _swig_property(_smoothfir.SfAccess_dummy_get, _smoothfir.SfAccess_dummy_set)
+    def __init__(self): 
+        this = _smoothfir.new_SfAccess()
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _smoothfir.delete_SfAccess
+    __del__ = lambda self : None;
+    def control_mutex(self, *args): return _smoothfir.SfAccess_control_mutex(self, *args)
+    def reset_peak(self): return _smoothfir.SfAccess_reset_peak(self)
+    def exit(self, *args): return _smoothfir.SfAccess_exit(self, *args)
+    def toggle_mute(self, *args): return _smoothfir.SfAccess_toggle_mute(self, *args)
+    def ismuted(self, *args): return _smoothfir.SfAccess_ismuted(self, *args)
+    def set_delay(self, *args): return _smoothfir.SfAccess_set_delay(self, *args)
+    def get_delay(self, *args): return _smoothfir.SfAccess_get_delay(self, *args)
+    def realtime_index(self): return _smoothfir.SfAccess_realtime_index(self)
+    def sfio_names(self, *args): return _smoothfir.SfAccess_sfio_names(self, *args)
+    def sfio_range(self, *args): return _smoothfir.SfAccess_sfio_range(self, *args)
+    def sfio_command(self, *args): return _smoothfir.SfAccess_sfio_command(self, *args)
+    def sflogic_names(self, *args): return _smoothfir.SfAccess_sflogic_names(self, *args)
+    def sflogic_exec(self, *args): return _smoothfir.SfAccess_sflogic_exec(self, *args)
+    def sflogic_command(self, *args): return _smoothfir.SfAccess_sflogic_command(self, *args)
+    def convolver_coeffs2cbuf(self, *args): return _smoothfir.SfAccess_convolver_coeffs2cbuf(self, *args)
+    def convolver_fftplan(self, *args): return _smoothfir.SfAccess_convolver_fftplan(self, *args)
+    def set_subdelay(self, *args): return _smoothfir.SfAccess_set_subdelay(self, *args)
+    def get_subdelay(self, *args): return _smoothfir.SfAccess_get_subdelay(self, *args)
+SfAccess_swigregister = _smoothfir.SfAccess_swigregister
+SfAccess_swigregister(SfAccess)
+
+class IO(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IO, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, IO, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["sfconf"] = _smoothfir.IO_sfconf_set
+    __swig_getmethods__["sfconf"] = _smoothfir.IO_sfconf_get
+    if _newclass:sfconf = _swig_property(_smoothfir.IO_sfconf_get, _smoothfir.IO_sfconf_set)
+    __swig_setmethods__["icomm"] = _smoothfir.IO_icomm_set
+    __swig_getmethods__["icomm"] = _smoothfir.IO_icomm_get
+    if _newclass:icomm = _swig_property(_smoothfir.IO_icomm_get, _smoothfir.IO_icomm_set)
+    __swig_setmethods__["iodev"] = _smoothfir.IO_iodev_set
+    __swig_getmethods__["iodev"] = _smoothfir.IO_iodev_get
+    if _newclass:iodev = _swig_property(_smoothfir.IO_iodev_get, _smoothfir.IO_iodev_set)
+    __swig_setmethods__["sample_format"] = _smoothfir.IO_sample_format_set
+    __swig_getmethods__["sample_format"] = _smoothfir.IO_sample_format_get
+    if _newclass:sample_format = _swig_property(_smoothfir.IO_sample_format_get, _smoothfir.IO_sample_format_set)
+    __swig_setmethods__["sample_rate"] = _smoothfir.IO_sample_rate_set
+    __swig_getmethods__["sample_rate"] = _smoothfir.IO_sample_rate_get
+    if _newclass:sample_rate = _swig_property(_smoothfir.IO_sample_rate_get, _smoothfir.IO_sample_rate_set)
+    def __init__(self, *args): 
+        this = _smoothfir.new_IO(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _smoothfir.delete_IO
+    __del__ = lambda self : None;
+    def preinit(self, *args): return _smoothfir.IO_preinit(self, *args)
+    def init(self, *args): return _smoothfir.IO_init(self, *args)
+    def synch_start(self): return _smoothfir.IO_synch_start(self)
+    def synch_stop(self): return _smoothfir.IO_synch_stop(self)
+    def start(self, *args): return _smoothfir.IO_start(self, *args)
+    def stop(self, *args): return _smoothfir.IO_stop(self, *args)
+    def connect_port(self, *args): return _smoothfir.IO_connect_port(self, *args)
+    def disconnect_port(self, *args): return _smoothfir.IO_disconnect_port(self, *args)
+    def get_jack_port_connections(self, *args): return _smoothfir.IO_get_jack_port_connections(self, *args)
+    def get_jack_ports(self): return _smoothfir.IO_get_jack_ports(self)
+    def get_jack_input_physical_ports(self): return _smoothfir.IO_get_jack_input_physical_ports(self)
+    def get_jack_input_ports(self): return _smoothfir.IO_get_jack_input_ports(self)
+    def get_jack_output_physical_ports(self): return _smoothfir.IO_get_jack_output_physical_ports(self)
+    def get_jack_output_ports(self): return _smoothfir.IO_get_jack_output_ports(self)
+    def is_running(self): return _smoothfir.IO_is_running(self)
+IO_swigregister = _smoothfir.IO_swigregister
+IO_swigregister(IO)
+
+MAX_MSG_LEN = _smoothfir.MAX_MSG_LEN
+SF_FORK_DONT_FORK = _smoothfir.SF_FORK_DONT_FORK
+SF_FORK_PRIO_MAX = _smoothfir.SF_FORK_PRIO_MAX
+SF_FORK_PRIO_FILTER = _smoothfir.SF_FORK_PRIO_FILTER
+SF_FORK_PRIO_OTHER = _smoothfir.SF_FORK_PRIO_OTHER
+class state(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, state, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, state, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["fctrl"] = _smoothfir.state_fctrl_set
+    __swig_getmethods__["fctrl"] = _smoothfir.state_fctrl_get
+    if _newclass:fctrl = _swig_property(_smoothfir.state_fctrl_get, _smoothfir.state_fctrl_set)
+    __swig_setmethods__["fchanged"] = _smoothfir.state_fchanged_set
+    __swig_getmethods__["fchanged"] = _smoothfir.state_fchanged_get
+    if _newclass:fchanged = _swig_property(_smoothfir.state_fchanged_get, _smoothfir.state_fchanged_set)
+    __swig_setmethods__["delay"] = _smoothfir.state_delay_set
+    __swig_getmethods__["delay"] = _smoothfir.state_delay_get
+    if _newclass:delay = _swig_property(_smoothfir.state_delay_get, _smoothfir.state_delay_set)
+    __swig_setmethods__["subdelay"] = _smoothfir.state_subdelay_set
+    __swig_getmethods__["subdelay"] = _smoothfir.state_subdelay_get
+    if _newclass:subdelay = _swig_property(_smoothfir.state_subdelay_get, _smoothfir.state_subdelay_set)
+    __swig_setmethods__["toggle_mute"] = _smoothfir.state_toggle_mute_set
+    __swig_getmethods__["toggle_mute"] = _smoothfir.state_toggle_mute_get
+    if _newclass:toggle_mute = _swig_property(_smoothfir.state_toggle_mute_get, _smoothfir.state_toggle_mute_set)
+    def __init__(self): 
+        this = _smoothfir.new_state()
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _smoothfir.delete_state
+    __del__ = lambda self : None;
+state_swigregister = _smoothfir.state_swigregister
+state_swigregister(state)
+
+class sleep_task(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, sleep_task, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, sleep_task, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["do_sleep"] = _smoothfir.sleep_task_do_sleep_set
+    __swig_getmethods__["do_sleep"] = _smoothfir.sleep_task_do_sleep_get
+    if _newclass:do_sleep = _swig_property(_smoothfir.sleep_task_do_sleep_get, _smoothfir.sleep_task_do_sleep_set)
+    __swig_setmethods__["block_sleep"] = _smoothfir.sleep_task_block_sleep_set
+    __swig_getmethods__["block_sleep"] = _smoothfir.sleep_task_block_sleep_get
+    if _newclass:block_sleep = _swig_property(_smoothfir.sleep_task_block_sleep_get, _smoothfir.sleep_task_block_sleep_set)
+    __swig_setmethods__["blocks"] = _smoothfir.sleep_task_blocks_set
+    __swig_getmethods__["blocks"] = _smoothfir.sleep_task_blocks_get
+    if _newclass:blocks = _swig_property(_smoothfir.sleep_task_blocks_get, _smoothfir.sleep_task_blocks_set)
+    __swig_setmethods__["seconds"] = _smoothfir.sleep_task_seconds_set
+    __swig_getmethods__["seconds"] = _smoothfir.sleep_task_seconds_get
+    if _newclass:seconds = _swig_property(_smoothfir.sleep_task_seconds_get, _smoothfir.sleep_task_seconds_set)
+    __swig_setmethods__["useconds"] = _smoothfir.sleep_task_useconds_set
+    __swig_getmethods__["useconds"] = _smoothfir.sleep_task_useconds_get
+    if _newclass:useconds = _swig_property(_smoothfir.sleep_task_useconds_get, _smoothfir.sleep_task_useconds_set)
+    def __init__(self): 
+        this = _smoothfir.new_sleep_task()
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _smoothfir.delete_sleep_task
+    __del__ = lambda self : None;
+sleep_task_swigregister = _smoothfir.sleep_task_swigregister
+sleep_task_swigregister(sleep_task)
+
+class SFLOGIC(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SFLOGIC, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SFLOGIC, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["sfconf"] = _smoothfir.SFLOGIC_sfconf_set
+    __swig_getmethods__["sfconf"] = _smoothfir.SFLOGIC_sfconf_get
+    if _newclass:sfconf = _swig_property(_smoothfir.SFLOGIC_sfconf_get, _smoothfir.SFLOGIC_sfconf_set)
+    __swig_setmethods__["icomm"] = _smoothfir.SFLOGIC_icomm_set
+    __swig_getmethods__["icomm"] = _smoothfir.SFLOGIC_icomm_get
+    if _newclass:icomm = _swig_property(_smoothfir.SFLOGIC_icomm_get, _smoothfir.SFLOGIC_icomm_set)
+    __swig_setmethods__["sfaccess"] = _smoothfir.SFLOGIC_sfaccess_set
+    __swig_getmethods__["sfaccess"] = _smoothfir.SFLOGIC_sfaccess_get
+    if _newclass:sfaccess = _swig_property(_smoothfir.SFLOGIC_sfaccess_get, _smoothfir.SFLOGIC_sfaccess_set)
+    __swig_setmethods__["unique"] = _smoothfir.SFLOGIC_unique_set
+    __swig_getmethods__["unique"] = _smoothfir.SFLOGIC_unique_get
+    if _newclass:unique = _swig_property(_smoothfir.SFLOGIC_unique_get, _smoothfir.SFLOGIC_unique_set)
+    __swig_setmethods__["name"] = _smoothfir.SFLOGIC_name_set
+    __swig_getmethods__["name"] = _smoothfir.SFLOGIC_name_get
+    if _newclass:name = _swig_property(_smoothfir.SFLOGIC_name_get, _smoothfir.SFLOGIC_name_set)
+    __swig_setmethods__["synch_sem"] = _smoothfir.SFLOGIC_synch_sem_set
+    __swig_getmethods__["synch_sem"] = _smoothfir.SFLOGIC_synch_sem_get
+    if _newclass:synch_sem = _swig_property(_smoothfir.SFLOGIC_synch_sem_get, _smoothfir.SFLOGIC_synch_sem_set)
+    __swig_setmethods__["fork_mode"] = _smoothfir.SFLOGIC_fork_mode_set
+    __swig_getmethods__["fork_mode"] = _smoothfir.SFLOGIC_fork_mode_get
+    if _newclass:fork_mode = _swig_property(_smoothfir.SFLOGIC_fork_mode_get, _smoothfir.SFLOGIC_fork_mode_set)
+    __swig_setmethods__["event_pipe"] = _smoothfir.SFLOGIC_event_pipe_set
+    __swig_getmethods__["event_pipe"] = _smoothfir.SFLOGIC_event_pipe_get
+    if _newclass:event_pipe = _swig_property(_smoothfir.SFLOGIC_event_pipe_get, _smoothfir.SFLOGIC_event_pipe_set)
+    __swig_setmethods__["msg"] = _smoothfir.SFLOGIC_msg_set
+    __swig_getmethods__["msg"] = _smoothfir.SFLOGIC_msg_get
+    if _newclass:msg = _swig_property(_smoothfir.SFLOGIC_msg_get, _smoothfir.SFLOGIC_msg_set)
+    def __init__(self, *args): 
+        this = _smoothfir.new_SFLOGIC(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _smoothfir.delete_SFLOGIC
+    __del__ = lambda self : None;
+    def iscallback(self): return _smoothfir.SFLOGIC_iscallback(self)
+    def preinit(self, *args): return _smoothfir.SFLOGIC_preinit(self, *args)
+    def init(self, *args): return _smoothfir.SFLOGIC_init(self, *args)
+    def input_timed(self, *args): return _smoothfir.SFLOGIC_input_timed(self, *args)
+    def output_timed(self, *args): return _smoothfir.SFLOGIC_output_timed(self, *args)
+    def print_overflows(self): return _smoothfir.SFLOGIC_print_overflows(self)
+SFLOGIC_swigregister = _smoothfir.SFLOGIC_swigregister
+SFLOGIC_swigregister(SFLOGIC)
+
 FILTER_ID = _smoothfir.FILTER_ID
 INPUT_ID = _smoothfir.INPUT_ID
 OUTPUT_ID = _smoothfir.OUTPUT_ID
 COEFF_ID = _smoothfir.COEFF_ID
-class SFLOGIC_PY(_object):
+class SFLOGIC_PY(SFLOGIC):
     __swig_setmethods__ = {}
+    for _s in [SFLOGIC]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SFLOGIC_PY, name, value)
     __swig_getmethods__ = {}
+    for _s in [SFLOGIC]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, SFLOGIC_PY, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -985,10 +1199,12 @@ class SndFileManager(_object):
 SndFileManager_swigregister = _smoothfir.SndFileManager_swigregister
 SndFileManager_swigregister(SndFileManager)
 
-class SFLOGIC_RECPLAY(_object):
+class SFLOGIC_RECPLAY(SFLOGIC):
     __swig_setmethods__ = {}
+    for _s in [SFLOGIC]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SFLOGIC_RECPLAY, name, value)
     __swig_getmethods__ = {}
+    for _s in [SFLOGIC]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, SFLOGIC_RECPLAY, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -1067,10 +1283,12 @@ class LADSPA_PLUGIN(_object):
 LADSPA_PLUGIN_swigregister = _smoothfir.LADSPA_PLUGIN_swigregister
 LADSPA_PLUGIN_swigregister(LADSPA_PLUGIN)
 
-class SFLOGIC_LADSPA(_object):
+class SFLOGIC_LADSPA(SFLOGIC):
     __swig_setmethods__ = {}
+    for _s in [SFLOGIC]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SFLOGIC_LADSPA, name, value)
     __swig_getmethods__ = {}
+    for _s in [SFLOGIC]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, SFLOGIC_LADSPA, name)
     __repr__ = _swig_repr
     __swig_setmethods__["plugins"] = _smoothfir.SFLOGIC_LADSPA_plugins_set
@@ -1138,10 +1356,12 @@ class realtime_RACE(_object):
 realtime_RACE_swigregister = _smoothfir.realtime_RACE_swigregister
 realtime_RACE_swigregister(realtime_RACE)
 
-class SFLOGIC_RACE(_object):
+class SFLOGIC_RACE(SFLOGIC):
     __swig_setmethods__ = {}
+    for _s in [SFLOGIC]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SFLOGIC_RACE, name, value)
     __swig_getmethods__ = {}
+    for _s in [SFLOGIC]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, SFLOGIC_RACE, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -1212,10 +1432,12 @@ class realtime_eq(_object):
 realtime_eq_swigregister = _smoothfir.realtime_eq_swigregister
 realtime_eq_swigregister(realtime_eq)
 
-class SFLOGIC_EQ(_object):
+class SFLOGIC_EQ(SFLOGIC):
     __swig_setmethods__ = {}
+    for _s in [SFLOGIC]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SFLOGIC_EQ, name, value)
     __swig_getmethods__ = {}
+    for _s in [SFLOGIC]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, SFLOGIC_EQ, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -1516,10 +1738,12 @@ class input_process_input(_object):
 input_process_input_swigregister = _smoothfir.input_process_input_swigregister
 input_process_input_swigregister(input_process_input)
 
-class SfRun(_object):
+class SfRun(SfAccess,SfCallback):
     __swig_setmethods__ = {}
+    for _s in [SfAccess,SfCallback]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SfRun, name, value)
     __swig_getmethods__ = {}
+    for _s in [SfAccess,SfCallback]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, SfRun, name)
     __repr__ = _swig_repr
     __swig_setmethods__["sfConv"] = _smoothfir.SfRun_sfConv_set
@@ -1646,10 +1870,12 @@ class jack_state(_object):
 jack_state_swigregister = _smoothfir.jack_state_swigregister
 jack_state_swigregister(jack_state)
 
-class ioJack(_object):
+class ioJack(IO):
     __swig_setmethods__ = {}
+    for _s in [IO]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, ioJack, name, value)
     __swig_getmethods__ = {}
+    for _s in [IO]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, ioJack, name)
     __repr__ = _swig_repr
     __swig_setmethods__["expected_priority"] = _smoothfir.ioJack_expected_priority_set

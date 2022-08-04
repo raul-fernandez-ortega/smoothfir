@@ -8,13 +8,8 @@
 #ifndef _SFIO_HPP_
 #define _SFIO_HPP_
 
-extern "C" {
-
 #include <libxml/parser.h>
 #include <libxml/tree.h>
-
-}
-
 #include <vector>
 
 #include "sfclasses.hpp"

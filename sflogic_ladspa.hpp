@@ -24,16 +24,14 @@ extern "C" {
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/select.h>
-
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-
 #include <ladspa.h>
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 #include <string>
 #include <vector>
 

@@ -17,15 +17,13 @@ extern "C" {
 #include <semaphore.h>
 #include <inttypes.h>
 
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-
 #include "defs.h"
 
 #ifdef __cplusplus
 }
 #endif
-
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 #include <string>
 #include <vector>
 

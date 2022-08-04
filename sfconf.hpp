@@ -15,10 +15,7 @@ extern "C" {
 
 #include <limits.h>
 #include <sndfile.h>
-
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-
+  
 #include "timestamp.h"
 #include "emalloc.h"
 #include "log2.h"
@@ -33,6 +30,8 @@ extern "C" {
 }
 #endif 
 
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 #include <vector>
 #include <string>
 

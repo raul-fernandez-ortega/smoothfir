@@ -21,19 +21,17 @@ extern "C" {
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/select.h>
-
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-
+  
 #include <fftw3.h>
 
 #ifdef __cplusplus
 }
 #endif 
 
-
 #define IS_SFLOGIC_MODULE
 
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 #include "sflogic.hpp"
 #include "sfmod.h"
 #include "emalloc.h"

@@ -25,9 +25,6 @@ extern "C" {
 #include <unistd.h>
 #include <sys/select.h>
 
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-
 #include <fftw3.h>
 
 #include <sndfile.h>
@@ -38,6 +35,9 @@ extern "C" {
 
 
 #define IS_SFLOGIC_MODULE
+
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
 #include "sflogic.hpp"
 

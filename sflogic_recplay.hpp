@@ -23,9 +23,6 @@ extern "C" {
 #include <unistd.h>
 #include <sys/select.h>
 
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-
 #include <sndfile.h>
 
 #ifdef __cplusplus
@@ -33,6 +30,8 @@ extern "C" {
 #endif 
 
 
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 #include <string>
 #include <vector>
 
