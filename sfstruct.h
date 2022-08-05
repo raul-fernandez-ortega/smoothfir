@@ -14,12 +14,12 @@ extern "C" {
 
 #include <sched.h>
 
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-
 #ifdef __cplusplus
 }
 #endif
+
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
 #include <string>
 #include <vector>

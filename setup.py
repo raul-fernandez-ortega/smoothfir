@@ -13,7 +13,6 @@ from os import system
 
 save_init_posix = sysconfig._init_posix
 C_OPTS = '-fPIC -O3'
-CC_WARN	= '-Wall -Wpointer-arith -Wshadow -Wcast-align -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs'
 
 def my_init_posix():
     print('my_init_posix: changing gcc to g++')
@@ -22,7 +21,7 @@ def my_init_posix():
     g['CC'] = 'g++'
     g['LDSHARED'] = 'g++ -shared -Xlinker -export-dynamic'
     g['CFLAGS']='-m32 -fno-strict-aliasing -fpermissive -DNDEBUG -03 -Wall'
-    g['OPT']= C_OPTS 
+    g['OPT']= C_OPTS
 
 sysconfig._init_posix = my_init_posix
 
