@@ -1343,7 +1343,7 @@ void SfRun::preinit(Convolver *_sfConv, Delay *_sfDelay, vector<SFLOGIC*> _sflog
   sfDelay = _sfDelay;
   sflogic = _sflogic;
   
-  sfDai->Dai_init();  
+  sfDai->Dai_init(_sfDelay);  
     
   /* allocate shared memory for I/O buffers and interprocess communication */
   cbufsize = sfConv->convolver_cbufsize();
@@ -1476,7 +1476,7 @@ void SfRun::sfrun(Convolver *_sfConv, Delay *_sfDelay, vector<SFLOGIC*> _sflogic
 
   isRunning = true;
 
-  sfDai->Dai_init();  
+  sfDai->Dai_init(_sfDelay);  
     
   /* allocate shared memory for I/O buffers and interprocess communication */
   cbufsize = sfConv->convolver_cbufsize();
@@ -1512,6 +1512,14 @@ void SfRun::sfrun(Convolver *_sfConv, Delay *_sfDelay, vector<SFLOGIC*> _sflogic
   FOR_IN_AND_OUT {
     icomm->ismuted[IO] = (uint32_t*)emalloc((sfconf->n_channels[IO]/32+1)*sizeof(int));
     for (n = 0; n < sfconf->n_channels[IO]; n++) {
+      if(sfconf->delay[IO][n] > 0) {
+	if(IO==IN) {
+	  fprintf(stderr, "Setting delay for input %d channel %s: %d samples\n",n, sfconf->channels[IO][n].name.c_str(), sfconf->delay[IO][n]);
+	}
+	else {
+	  fprintf(stderr, "Setting delay for output %d channel %s: %d samples\n",n, sfconf->channels[IO][n].name.c_str(), sfconf->delay[IO][n]);
+	}
+      }
       icomm->delay[IO].push_back(sfconf->delay[IO][n]);
       if (sfconf->mute[IO][n]) {
 	bit_set_volatile(icomm->ismuted[IO], n);

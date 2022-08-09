@@ -49,6 +49,7 @@ extern "C" {
 #include "sfinout.h"
 #include "sfcallback.hpp"
 #include "sfio.hpp"
+#include "sfdelay.hpp"
 
 #ifndef O_LARGEFILE
 #define O_LARGEFILE 0
@@ -90,6 +91,7 @@ class Dai {
   SfCallback  *sfRun;
   struct sfconf *sfconf;
   intercomm_area *icomm;
+  Delay *sfDelay;
   uint8_t *buffer;
   struct comarea ca;
   void *iobuffers[2][2];
@@ -122,7 +124,7 @@ class Dai {
   struct timeval starttv;
 
   bool output_isfirst, output_islast;
-  int output_buf_index, output_curbuf;
+  int output_buf_index, output_curbuf, period_size;
   fd_set readfds;
 
   char *msgstr;
@@ -144,6 +146,10 @@ class Dai {
  
   void noninterleave_modify(int io);
 
+  void update_delay(struct subdev *sd, int io, uint8_t *buf);
+
+  void allocate_delay_buffers(int io, struct subdev *sd);
+
   void do_mute(struct subdev *sd,
 	       int io,
 	       int wsize,
@@ -154,9 +160,7 @@ class Dai {
   
   bool init_output(struct dai_subdevice *subdev);
 
-  void calc_buffer_format(int fragsize,
-			  int io,
-			  struct dai_buffer_format *format);
+  void calc_buffer_format(int fragsize, int io, struct dai_buffer_format *format);
   
   bool callback_init(void);
 
@@ -174,7 +178,7 @@ public:
       intercomm_area *_icomm,
       SfCallback *_callbackClass);
 
-  void Dai_init(void);
+  void Dai_init(Delay *_sfDelay);
   
   ~Dai(void);
   

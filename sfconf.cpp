@@ -733,7 +733,10 @@ struct iodev* SfConf::parse_iodev(xmlNodePtr xmlnode, int io)
 	    parse_error("negative delay.\n");
 	  }
 	  if (sfconf->delay[io][sfconf->n_channels[io] +iodev->virtual_channels] > maxdelay[io]) {
-	    maxdelay[io] = sfconf->delay[io][sfconf->n_channels[io] + iodev->virtual_channels];
+	    maxdelay[io] = sfconf->delay[io][sfconf->n_channels[io] + iodev->virtual_channels] ;
+	  }
+	  if (sfconf->delay[io][sfconf->n_channels[io] +iodev->virtual_channels] > maxdelay_setting) {
+	    maxdelay_setting = sfconf->delay[io][sfconf->n_channels[io] + iodev->virtual_channels] ;
 	  }
 	}
 	xmlchild1 = xmlchild1->next;

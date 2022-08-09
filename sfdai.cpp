@@ -80,6 +80,47 @@ void Dai::noninterleave_modify(int io)
   }
 }
 
+void Dai::update_delay(struct subdev *sd, int io, uint8_t *buf)
+{
+  struct buffer_format *bf;
+  int n, newdelay, virtch;
+
+  if (sd->db == NULL) {
+    return;
+  }
+  for (n = 0; n < sd->channels.used_channels; n++) {
+    if (sd->db[n] == NULL) {
+      continue;
+    }
+    bf = &dai_buffer_format[io]->bf[sd->channels.channel_name[n]];
+    virtch = sfconf->phys2virt[io][sd->channels.channel_name[n]][0];
+    newdelay = ca.delay[io][sd->channels.channel_name[n]];
+    /*if (sfconf->use_subdelay[io] && sfconf->subdelay[io][virtch] == SF_UNDEFINED_SUBDELAY) {
+      newdelay += sfconf->sdf_length;
+      }*/
+    sfDelay->delay_update(sd->db[n], (void *)&buf[bf->byte_offset], bf->sf.bytes, bf->sample_spacing, newdelay, NULL);
+  }
+}
+
+void Dai::allocate_delay_buffers(int io, struct subdev *sd)
+{
+  int n, virtch;
+
+  sd->db = (delaybuffer_t**) emalloc(sd->channels.used_channels * sizeof(delaybuffer_t *));
+  for (n = 0; n < sd->channels.used_channels; n++) {
+    /* check if we need a delay buffer here, that is if at least one
+       channel has a direct virtual to physical mapping */
+    if (sfconf->n_virtperphys[io][sd->channels.channel_name[n]] == 1) {
+      virtch = sfconf->phys2virt[io][sd->channels.channel_name[n]][0];
+      sd->db[n] = sfDelay->delay_allocate_buffer(period_size, sfconf->delay[io][virtch], sfconf->maxdelay[io][virtch], sd->channels.sf.bytes);
+    } else {
+      /* this delay is taken care of previous to feeding the channel
+	 output to this module */
+      sd->db[n] = NULL;
+    }
+  }
+}
+
 void Dai::do_mute(struct subdev *sd,
 		  int io,
 		  int wsize,
@@ -204,16 +245,14 @@ void Dai::do_mute(struct subdev *sd,
 
 bool Dai::init_input(struct dai_subdevice *dai_subdev)
 {
+  int n;
+  
   dev[IN]->channels = dai_subdev->channels;
   dev[IN]->index = 0;
   dev[IN]->cb.curbuf = 0;
   dev[IN]->cb.iodelay_fill = 0;
   dev[IN]->cb.frames_left = 0;
-  sfconf->io->init(IN, 
-		   dai_subdev->i_handle,
-		   dai_subdev->channels.used_channels,
-		   dai_subdev->channels.channel_selection,
-		   dev[IN]);
+  sfconf->io->init(IN, dai_subdev->i_handle, dai_subdev->channels.used_channels, dai_subdev->channels.channel_selection, dev[IN]);
   dev[IN]->fd = -1;
   if (dev[IN]->block_size_frames == 0 || sfconf->filter_length % dev[IN]->block_size_frames != 0) {
     fprintf(stderr, "Invalid block size for callback input.\n");
@@ -223,22 +262,21 @@ bool Dai::init_input(struct dai_subdevice *dai_subdev)
   //dev[IN]->bad_alignment = false;
   noninterleave_modify(IN);
   dev[IN]->block_size = dev[IN]->block_size_frames * dev[IN]->channels.open_channels * dev[IN]->channels.sf.bytes;
+  allocate_delay_buffers(IN, dev[IN]);
   update_devmap(IN);
   return true;
 }
 
 bool Dai::init_output(struct dai_subdevice *dai_subdev)
 {
+  int n;
+  
   dev[OUT]->channels = dai_subdev->channels;
   dev[OUT]->index = 0;
   dev[OUT]->cb.curbuf = 0;
   dev[OUT]->cb.iodelay_fill = 0;
   dev[OUT]->cb.frames_left = 0;
-  sfconf->io->init(OUT, 
-		   dai_subdev->i_handle,
-		   dai_subdev->channels.used_channels,
-		   dai_subdev->channels.channel_selection,
-		   dev[OUT]);
+  sfconf->io->init(OUT, dai_subdev->i_handle, dai_subdev->channels.used_channels, dai_subdev->channels.channel_selection, dev[OUT]);
   dev[OUT]->fd = -1;
   if (dev[OUT]->block_size_frames == 0 || sfconf->filter_length % dev[OUT]->block_size_frames != 0) {
     fprintf(stderr, "Invalid block size for callback output.\n");
@@ -247,6 +285,7 @@ bool Dai::init_output(struct dai_subdevice *dai_subdev)
   dev[OUT]->isinterleaved = !!dev[OUT]->isinterleaved;
   noninterleave_modify(OUT);
   dev[OUT]->block_size = dev[OUT]->block_size_frames * dev[OUT]->channels.open_channels * dev[OUT]->channels.sf.bytes;
+  allocate_delay_buffers(OUT, dev[OUT]);
   update_devmap(OUT);
   return true;
 }
@@ -345,11 +384,13 @@ Dai::Dai(struct sfconf *_sfconf,
   icomm = _icomm;
 }
 
-void Dai::Dai_init(void)
+void Dai::Dai_init(Delay *_sfDelay)
 {
   bool all_bad_alignment, none_clocked;
   int n, msec;
   int IO;
+
+  sfDelay = _sfDelay;
    
   n_fd_devs[SF_IN] = 0;
   n_fd_devs[SF_OUT] = 0;
@@ -368,7 +409,7 @@ void Dai::Dai_init(void)
   dai_buffer_format[0] = NULL;
   dai_buffer_format[1] = NULL;
   
-  //period_size = sfconf->filter_length;
+  period_size = sfconf->filter_length;
   //sample_rate = sfconf->sampling_rate;
   monitor_rate_fd = -1;
   callback_ready_waiting[SF_IN] = 0;
@@ -559,6 +600,7 @@ void Dai::process_callback_input(struct subdev *sd,
   if (sd->buf_left == 0) {
     sd->cb.curbuf = !sd->cb.curbuf;
     do_mute(sd, IN, sd->buf_size, (void *)(buf + sd->buf_offset), 0);
+    update_delay(sd, IN, buf);
   }
 };
 
@@ -587,6 +629,9 @@ void Dai::process_callback_output(struct subdev *sd,
     return;
   }
   
+  if (sd->buf_left == sd->buf_size) {
+    update_delay(sd, OUT, buf);
+  }
   do_mute(sd, OUT, count, (void *)(buf + sd->buf_offset), sd->buf_size - sd->buf_left);
   if (sd->isinterleaved) {
     memcpy(cbbufs[0], buf + sd->buf_offset + sd->buf_size - sd->buf_left, count);
