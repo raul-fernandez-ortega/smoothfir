@@ -20,5 +20,5 @@ Libraries needed:
 
 There is a sample scripy in python for running smoothfir (run_DRCOP.py) using an input xml config file (config sample config_DRCOP_1.xml):
 
-python run_DRCOP.py config_DRCOP_1.xml
+python run_DRCoP.py config_DRCOP_1.xml
 
