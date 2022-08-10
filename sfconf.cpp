@@ -878,7 +878,7 @@ void SfConf::parse_setting(xmlNodePtr xmlnode, uint32_t *repeat_bitset)
 	if (sfconf->analog_powersave < 1.0) {
 	  sfconf->powersave = true;
 	}
-      }  
+      }
     } else if (!xmlStrcmp(xmlnode->name, (const xmlChar *)"allow_poll_mode")) {
       field_repeat_test(repeat_bitset, "allow_poll_mode", 12);
       sfconf->allow_poll_mode = (!xmlStrcmp(xmlNodeGetContent(xmlnode), (const xmlChar *)"true") ? true : false);
@@ -1045,6 +1045,7 @@ void SfConf::sfconf_init(char *filename)
 
   sfconf->quiet = quiet;
   sfconf->realsize = sizeof(float);
+  sfconf->realtime_priority = true;
   
   strcpy(current_filename, filename);
   current_filename[PATH_MAX-1] = '\0';
@@ -1541,7 +1542,7 @@ void SfConf::sfconf_init(char *filename)
   sfconf->realtime_maxprio = 4;
   sfconf->realtime_midprio = 3;
   sfconf->realtime_minprio = 2;
-  sfconf->realtime_usermaxprio = 1;
+  sfconf->realtime_usermaxprio = 4;
   min_prio = -1;
   max_prio = 0;
   FOR_IN_AND_OUT {

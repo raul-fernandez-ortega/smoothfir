@@ -348,11 +348,7 @@ bool SfRun::memiszero(void *buf, int size)
   return acc == 0;
 }
 
-bool SfRun::test_silent(void *buf,
-			int size,
-			int realsize,
-			double analog_powersave,
-			double scale)
+bool SfRun::test_silent(void *buf, int size, int realsize, double analog_powersave, double scale)
 {
   int n, count;
   double dmax;
@@ -744,7 +740,10 @@ void SfRun::filter_process(void)
   for (n = 0; n < sfconf->fproc.n_unique_channels[OUT]; n++) {
     memset(output_freqcbuf[sfconf->fproc.unique_channels[OUT][n]], 0, convbufsize);
   }
-  
+  if (sfconf->realtime_priority) {
+        /* priority is lowered later if necessary */
+        sf_make_realtime(0, sfconf->realtime_maxprio, "filter");
+  }
   if (sem_post(&filter_2_bl_output_sem)==-1) { // for init
     if (sfconf != NULL && sfconf->debug) {
       print_debug();
@@ -808,6 +807,9 @@ void SfRun::filter_process(void)
 
     /* change to lower priority so we can be pre-empted, but we only do so
        if required by the input (or output) process */
+    if (sfconf->realtime_priority && change_prio) {
+      sf_make_realtime(0, sfconf->realtime_minprio, NULL);
+    }
     timestamp(&icomm->debug.f[dbg_pos].mutex.ts_ret);
     
     timestamp(&t3);
@@ -899,11 +901,7 @@ void SfRun::filter_process(void)
 	  }
 	}
 	if (!iszero || !sfconf->powersave) {
-	  sfConv->convolver_mixnscale(mixconvbuf_filters[n],
-				      static_evalbuf,
-				      icomm_fctrl[n].fscale,
-				      sfconf->fproc.filters[n].n_filters[IN],
-				      CONVOLVER_MIXMODE_OUTPUT);
+	  sfConv->convolver_mixnscale(mixconvbuf_filters[n], static_evalbuf, icomm_fctrl[n].fscale, sfconf->fproc.filters[n].n_filters[IN], CONVOLVER_MIXMODE_OUTPUT);
 	  temp_buffer_zero = false;
 	} else if (!temp_buffer_zero) {
 	  memset(static_evalbuf, 0, convbufsize);
@@ -912,9 +910,7 @@ void SfRun::filter_process(void)
         
 	/* evaluate convolution */
 	if (!temp_buffer_zero || !evalbuf_zero[n] || !sfconf->powersave) {
-	  sfConv->convolver_convolve_eval(static_evalbuf,
-					  evalbuf[n],
-					  static_evalbuf);
+	  sfConv->convolver_convolve_eval(static_evalbuf, evalbuf[n], static_evalbuf);
 	  evalbuf_zero[n] = false;
 	  if (temp_buffer_zero) {
 	    evalbuf_zero[n] = true;
@@ -1227,6 +1223,9 @@ void SfRun::filter_process(void)
  
     /* signal the output process */
     timestamp(&icomm->debug.f[dbg_pos].w_output.ts_call);
+    if (sfconf->realtime_priority && change_prio) {
+      sf_make_realtime(0, sfconf->realtime_maxprio, NULL);
+        }
     if (sem_post(&filter_2_cb_output_sem)==-1) {
       if (sfconf != NULL && sfconf->debug) {
 	print_debug();
@@ -1816,10 +1815,7 @@ void SfRun::sf_make_realtime(pid_t pid,
     }
   }
   
-  if (sfconf->lock_memory) {
-#ifdef __OS_FREEBSD__
-    pinfo("Warning: lock_memory not supported on this platform.\n");
-#else        
+  if (sfconf->lock_memory) {       
     if (mlockall(MCL_CURRENT | MCL_FUTURE) == -1) {
       if (name != NULL) {
 	fprintf(stderr, "Could not lock memory for %s process: %s.\n", name, strerror(errno));
@@ -1830,8 +1826,7 @@ void SfRun::sf_make_realtime(pid_t pid,
 	print_debug();
       }
       sfstop();
-    }
-#endif        
+    }       
   }
   if (name != NULL) {
     pinfo("Realtime priority %d set for %s process (pid %d)\n",priority, name, (int)getpid());
