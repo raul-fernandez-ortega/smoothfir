@@ -97,8 +97,6 @@ SFLOGIC_RACE::SFLOGIC_RACE(struct sfconf *_sfconf,
   unique = false;
   dump_direct_file = NULL;
   dump_cross_file = NULL;
-  //debug_dump_filter_path = new char [12];
-  //strcpy(debug_dump_filter_path, "./direct.raw");
   debug = false;
   name = "race";
   memset(msg, 0, MAX_MSG_LEN);

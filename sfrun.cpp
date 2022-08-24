@@ -213,6 +213,7 @@ void SfRun::print_overflows(void)
   double peak;
   double new_att;
   int n, j;
+  unsigned int k, l;
     
   for (n = 0; n < sfconf->n_channels[OUT]; n++) {
     if (icomm->out_overflow[n].n_overflows > 0) {
@@ -242,9 +243,9 @@ void SfRun::print_overflows(void)
   }   
   if(is_overflow && sfconf->overflow_control) {
     pinfo(" Overflow control output attenuation.");
-    for(n = 0; n < sfconf->filters.size(); n++) {
-      for(j = 0; j < icomm->fctrl[n].scale[OUT].size(); j++) {
-	icomm->fctrl[n].scale[OUT][j] /= new_att;
+    for(k = 0; k < sfconf->filters.size(); k++) {
+      for(l = 0; l < icomm->fctrl[k].scale[OUT].size(); j++) {
+	icomm->fctrl[k].scale[OUT][l] /= new_att;
       } 
     }
   }
@@ -429,8 +430,8 @@ void SfRun::filter_process(void)
   unsigned int blockcounter = 0;
   delaybuffer_t *output_db[SF_MAXCHANNELS];
   delaybuffer_t *input_db[SF_MAXCHANNELS];
-  void *output_sd_rest[SF_MAXCHANNELS];
-  void *input_sd_rest[SF_MAXCHANNELS];
+  //void *output_sd_rest[SF_MAXCHANNELS];
+  //void *input_sd_rest[SF_MAXCHANNELS];
   bool need_crossfadebuf = false;
   bool need_mixbuf = false;
   bool mixbuf_is_filled;
@@ -513,7 +514,7 @@ void SfRun::filter_process(void)
   for (n = j = 0; n < n_procinputs; n++) {
     virtch = channels[IN][n];
     physch = sfconf->virt2phys[IN][virtch];
-    input_sd_rest[virtch] = NULL;
+    //input_sd_rest[virtch] = NULL;
     if (sfconf->n_virtperphys[IN][physch] > 1) {
       delay = 0;
       input_db[virtch] = sfDelay->delay_allocate_buffer(fragsize,
@@ -537,7 +538,7 @@ void SfRun::filter_process(void)
   for (n = 0; n < n_procoutputs; n++) {
     virtch = channels[OUT][n];
     physch = sfconf->virt2phys[OUT][virtch];
-    output_sd_rest[virtch] = NULL;
+    //output_sd_rest[virtch] = NULL;
     if (sfconf->n_virtperphys[OUT][physch] > 1) {
       delay = 0;
       output_db[virtch] = sfDelay->delay_allocate_buffer(fragsize,

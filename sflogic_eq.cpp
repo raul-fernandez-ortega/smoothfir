@@ -137,7 +137,7 @@ int SFLOGIC_EQ::preinit(xmlNodePtr sfparams, int _debug)
   double mag[2][MAX_BANDS];
   double phase[2][MAX_BANDS];
   double bands[MAX_BANDS];
-  double freqval;
+  double freqval = 20;
   int n_mag, n_phase, n_bands;
   int n, i, bandindex;
   xmlNodePtr children;
@@ -301,7 +301,7 @@ int SFLOGIC_EQ::config(int n_eq, string _coeff_name, bool _minphase, string _std
   double mag[2][MAX_BANDS];
   double phase[2][MAX_BANDS];
   double bands[MAX_BANDS];
-  double freqval;
+  //double freqval;
   int n_mag, n_phase, n_bands;
 
   if (n_eq == MAX_EQUALISERS) {

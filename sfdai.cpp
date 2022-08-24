@@ -83,7 +83,7 @@ void Dai::noninterleave_modify(int io)
 void Dai::update_delay(struct subdev *sd, int io, uint8_t *buf)
 {
   struct buffer_format *bf;
-  int n, newdelay, virtch;
+  int n, newdelay;
 
   if (sd->db == NULL) {
     return;
@@ -93,7 +93,7 @@ void Dai::update_delay(struct subdev *sd, int io, uint8_t *buf)
       continue;
     }
     bf = &dai_buffer_format[io]->bf[sd->channels.channel_name[n]];
-    virtch = sfconf->phys2virt[io][sd->channels.channel_name[n]][0];
+    //virtch = sfconf->phys2virt[io][sd->channels.channel_name[n]][0];
     newdelay = ca.delay[io][sd->channels.channel_name[n]];
     /*if (sfconf->use_subdelay[io] && sfconf->subdelay[io][virtch] == SF_UNDEFINED_SUBDELAY) {
       newdelay += sfconf->sdf_length;
@@ -244,9 +244,7 @@ void Dai::do_mute(struct subdev *sd,
 }
 
 bool Dai::init_input(struct dai_subdevice *dai_subdev)
-{
-  int n;
-  
+{ 
   dev[IN]->channels = dai_subdev->channels;
   dev[IN]->index = 0;
   dev[IN]->cb.curbuf = 0;
@@ -268,9 +266,7 @@ bool Dai::init_input(struct dai_subdevice *dai_subdev)
 }
 
 bool Dai::init_output(struct dai_subdevice *dai_subdev)
-{
-  int n;
-  
+{ 
   dev[OUT]->channels = dai_subdev->channels;
   dev[OUT]->index = 0;
   dev[OUT]->cb.curbuf = 0;
@@ -386,9 +382,9 @@ Dai::Dai(struct sfconf *_sfconf,
 
 void Dai::Dai_init(Delay *_sfDelay)
 {
-  bool all_bad_alignment, none_clocked;
-  int n, msec;
+  int n;
   int IO;
+  //bool none_clocked;
 
   sfDelay = _sfDelay;
    
@@ -410,7 +406,6 @@ void Dai::Dai_init(Delay *_sfDelay)
   dai_buffer_format[1] = NULL;
   
   period_size = sfconf->filter_length;
-  //sample_rate = sfconf->sampling_rate;
   monitor_rate_fd = -1;
   callback_ready_waiting[SF_IN] = 0;
   callback_ready_waiting[SF_OUT] = 0 ;
@@ -494,8 +489,8 @@ void Dai::Dai_init(Delay *_sfDelay)
   /* decide if to use input poll mode */
   input_poll_mode = false;
   //all_bad_alignment = true;
-  none_clocked = true;
-  msec = (sfconf->filter_length * 1000) / sfconf->sampling_rate;
+  //none_clocked = true;
+  //msec = (sfconf->filter_length * 1000) / sfconf->sampling_rate;
   return;
 }
 
@@ -578,12 +573,12 @@ void Dai::process_callback_input(struct subdev *sd,
   struct buffer_format *sf;
   uint8_t *buf, *copybuf;
   int n, cnt, count;
-  float *wbuf;
+  //float *wbuf;
   
   buf = (uint8_t *)iobuffers[IN][sd->cb.curbuf];
-  for (n = 0; n < sd->channels.used_channels; n++) {
+  /*for (n = 0; n < sd->channels.used_channels; n++) {
     wbuf = (float*)cbbufs[n];
-  }
+    }*/
   count = frame_count * sd->channels.used_channels * sd->channels.sf.bytes;
   if (sd->isinterleaved) {
     memcpy(buf + sd->buf_offset + sd->buf_size - sd->buf_left, cbbufs[0], count);
@@ -612,7 +607,7 @@ void Dai::process_callback_output(struct subdev *sd,
   struct buffer_format *sf;
   uint8_t *buf, *copybuf;
   int n, cnt, count;
-  float *wbuf;
+  //float *wbuf;
   
   buf = (uint8_t *)iobuffers[OUT][sd->cb.curbuf];
   count = frame_count * sd->channels.used_channels * sd->channels.sf.bytes;
@@ -641,7 +636,7 @@ void Dai::process_callback_output(struct subdev *sd,
     copybuf = buf + sd->buf_offset + (sd->buf_size - sd->buf_left) / sd->channels.used_channels;
     for (n = 0; n < sd->channels.used_channels; n++) {
       memcpy(cbbufs[n], copybuf, cnt);
-      wbuf = (float *)copybuf;
+      //wbuf = (float *)copybuf;
       copybuf += sfconf->filter_length * sf->sf.sbytes;
     }
   }

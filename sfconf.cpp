@@ -1025,7 +1025,7 @@ void SfConf::sfconf_init(char *filename)
   uint32_t apply_dither[SF_MAXCHANNELS / 32 + 1];
   uint32_t used_processes[SF_MAXPROCESSES / 32 + 1];
   uint32_t repeat_bitset = 0;
-  int n, i, j, k, io, virtch, physch;
+  int n = 0, i = 0, j = 0, k = 0, io = 0, virtch = 0, physch = 0;
   unsigned int l;
   bool load_balance = false;
   int *channels[2];

@@ -13,7 +13,7 @@ public:
 
   SfCallback(void) {};
 
-  ~SfCallback(void) {};
+  virtual ~SfCallback(void) {};
 
   virtual void sf_callback_ready(int io) { return; };
   

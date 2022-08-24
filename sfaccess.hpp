@@ -34,7 +34,7 @@ public:
   vector<string> dummy;
 
   SfAccess(void) {};
-  ~SfAccess(void) {};
+  virtual ~SfAccess(void) {};
 
   virtual void control_mutex(int lock) {};
   virtual void reset_peak(void) {};

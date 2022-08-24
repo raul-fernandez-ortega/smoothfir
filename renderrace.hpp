@@ -98,7 +98,6 @@ void RENDER_RACE_NAME()
       sf_writef_double(sf_direct_file, (real_t*)d_rbuf, sfconf->filter_length * sfconf->coeffs[RACEFilter.direct_coeff].n_blocks );
 #endif
       sf_close(sf_direct_file);
-      //WRITEFILTER_NAME(dump_direct_file, (real_t*)d_rbuf, sfconf->filter_length * sfconf->coeffs[RACEFilter.direct_coeff].n_blocks );
       }
     }
     if (dump_cross_file != NULL) {
@@ -111,7 +110,6 @@ void RENDER_RACE_NAME()
       sf_writef_double(sf_cross_file, (real_t*)c_rbuf, sfconf->filter_length * sfconf->coeffs[RACEFilter.cross_coeff].n_blocks );
 #endif
       sf_close(sf_cross_file);
-      //WRITEFILTER_NAME(dump_cross_file, (real_t*)c_rbuf, sfconf->filter_length * sfconf->coeffs[RACEFilter.cross_coeff].n_blocks );
       }
     }
     

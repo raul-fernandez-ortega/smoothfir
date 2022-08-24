@@ -72,7 +72,7 @@ public:
 	  intercomm_area *_icomm,
 	  SfAccess *_sfaccess) : sfconf(_sfconf), icomm(_icomm), sfaccess(_sfaccess), unique(false) {};
   
-  ~SFLOGIC(void) {};
+  virtual ~SFLOGIC(void) {};
 
   virtual bool iscallback(void) { return false; }
 

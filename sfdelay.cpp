@@ -10,16 +10,12 @@
 Delay::Delay(struct sfconf *_sfconf,
 	     int step_count)
 {
-  void *filter;
-  int n;
-
   sfconf = _sfconf;
 
   if (step_count < 2) {
     fprintf(stderr, "Invalid step_count %d.\n", step_count);
     return;
   }
-
   return;
 }
 

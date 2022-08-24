@@ -329,7 +329,7 @@ int LADSPA_PLUGIN::preinit(xmlNodePtr sfparams, bool _debug)
   xmlNodePtr children;
   string port_name;
   uint32_t bitset, bitset2;
-  LADSPA_Data port_value;
+  LADSPA_Data port_value = 0;
 
   debug = _debug;
   bitset = 0;

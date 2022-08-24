@@ -83,6 +83,7 @@ public:
   bool change_input_attenuation(string inputchannel, double scale);
   double get_input_attenuation(string inputchannel);
   bool change_output_attenuation(string outputchannel, double scale);
+  double get_output_attenuation(string outputchannel);  
 
   bool change_filter_coeff(string filtername, int coeff); 
   bool change_filter_attenuation(string filtername, int INOUT, int nchannel, double scale);

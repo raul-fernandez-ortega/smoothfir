@@ -167,6 +167,19 @@ bool SFLOGIC_PY::change_output_attenuation(string outputchannel, double scale)
   return true;
 }
 
+double SFLOGIC_PY::get_output_attenuation(string outputchannel)
+{
+  unsigned int i, j;
+  for(i = 0; i < sfconf->filters.size(); i++) {
+    for(j = 0; j < sfconf->filters[i].channels[OUT].size(); j++) {
+      if(sfconf->channels[OUT][j].name.compare(outputchannel) == 0) {
+	return get_filter_attenuation(sfconf->filters[i].name, OUT, j);
+      }
+    }
+  }
+  return -90;
+}
+
 bool SFLOGIC_PY::change_filter_coeff(string filtername, int coeff)
 {
   unsigned int n;

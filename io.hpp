@@ -34,7 +34,7 @@ public:
   IO(struct sfconf *_sfconf,
      struct intercomm_area *_icomm) : sfconf(_sfconf), icomm(_icomm) {};
   
-  ~IO(void) {};
+  virtual ~IO(void) {};
 
   virtual void preinit(int io, struct iodev *_iodev) {};
 
