@@ -19,7 +19,7 @@ def my_init_posix():
     save_init_posix()
     g = sysconfig._config_vars
     g['CC'] = 'g++'
-    g['LDSHARED'] = 'g++ -shared -Xlinker -export-dynamic'
+    g['LDSHARED'] = 'g++ -shared -Xlinker -export-dynamic -Wundef'
     g['CFLAGS']='-m32 -O3 -fno-strict-aliasing -fpermissive -DNDEBUG -Wall -Wno-class-memaccess -Wno-sequence-point'
     g['OPT']= C_OPTS
 

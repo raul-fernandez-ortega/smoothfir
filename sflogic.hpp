@@ -22,8 +22,6 @@ extern "C" {
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
- 
-
 #include <string>
 #include <vector>
 
@@ -72,7 +70,7 @@ public:
 	  intercomm_area *_icomm,
 	  SfAccess *_sfaccess) : sfconf(_sfconf), icomm(_icomm), sfaccess(_sfaccess), unique(false) {};
   
-  virtual ~SFLOGIC(void) {};
+  ~SFLOGIC(void) {};
 
   virtual bool iscallback(void) { return false; }
 

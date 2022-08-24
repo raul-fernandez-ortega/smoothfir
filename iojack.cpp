@@ -303,11 +303,11 @@ bool ioJack::global_init(void)
 {
   jack_status_t status;
   jack_set_error_function(error_callback);
-  while ((client = jack_client_open(client_name, JackNoStartServer, &status)) == NULL) {
+  if ((client = jack_client_open(client_name, JackNoStartServer, &status)) == NULL) {
     fprintf(stderr, "JACK I/O: Could not become JACK client (status: 0x%2.0x). Error message(s):\n", status);
     if ((status & JackFailure) != 0) {
       fprintf(stderr, "Overall operation failed.\n");
-      //exit(SF_EXIT_OTHER);
+      exit(SF_EXIT_OTHER);
     }
     if ((status & JackInvalidOption) != 0) {
       fprintf(stderr, "  Likely bug in smoothfir: the operation contained an invalid or unsupported\noption.\n");
